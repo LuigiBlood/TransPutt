@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30225.117
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransPutt", "TransPutt.csproj", "{ED4E0130-7CEE-4260-AA5B-861E2C216994}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ED4E0130-7CEE-4260-AA5B-861E2C216994}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED4E0130-7CEE-4260-AA5B-861E2C216994}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED4E0130-7CEE-4260-AA5B-861E2C216994}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED4E0130-7CEE-4260-AA5B-861E2C216994}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CEDD917E-7F61-40B2-B489-7832C9DA3013}
+	EndGlobalSection
+EndGlobal
