@@ -51,5 +51,15 @@ namespace TransPutt
             }
             return "Invalid";
         }
+
+        public static byte[] Subarray(byte[] array, int index, int size)
+        {
+            byte[] temp = new byte[size];
+
+            for (int i = 0; i < size; i++)
+                temp[i] = array[index + i];
+
+            return temp;
+        }
     }
 }

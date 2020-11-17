@@ -64,10 +64,11 @@
             // 
             // numericUpDownID1
             // 
-            this.numericUpDownID1.Location = new System.Drawing.Point(375, 30);
+            this.numericUpDownID1.Location = new System.Drawing.Point(353, 30);
             this.numericUpDownID1.Name = "numericUpDownID1";
-            this.numericUpDownID1.Size = new System.Drawing.Size(69, 20);
+            this.numericUpDownID1.Size = new System.Drawing.Size(51, 20);
             this.numericUpDownID1.TabIndex = 2;
+            this.numericUpDownID1.ValueChanged += new System.EventHandler(this.numericUpDownID1_ValueChanged);
             // 
             // textBoxDesc1
             // 
@@ -79,7 +80,7 @@
             // 
             // buttonSave1
             // 
-            this.buttonSave1.Location = new System.Drawing.Point(199, 355);
+            this.buttonSave1.Location = new System.Drawing.Point(15, 355);
             this.buttonSave1.Name = "buttonSave1";
             this.buttonSave1.Size = new System.Drawing.Size(75, 23);
             this.buttonSave1.TabIndex = 4;
@@ -100,7 +101,7 @@
             // 
             this.pictureBoxPreview1.Location = new System.Drawing.Point(12, 254);
             this.pictureBoxPreview1.Name = "pictureBoxPreview1";
-            this.pictureBoxPreview1.Size = new System.Drawing.Size(262, 95);
+            this.pictureBoxPreview1.Size = new System.Drawing.Size(384, 96);
             this.pictureBoxPreview1.TabIndex = 6;
             this.pictureBoxPreview1.TabStop = false;
             // 
@@ -111,6 +112,7 @@
             this.textBoxText1.Name = "textBoxText1";
             this.textBoxText1.Size = new System.Drawing.Size(262, 74);
             this.textBoxText1.TabIndex = 7;
+            this.textBoxText1.TextChanged += new System.EventHandler(this.textBoxText1_TextChanged);
             // 
             // label3
             // 
@@ -124,7 +126,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(318, 32);
+            this.label4.Location = new System.Drawing.Point(296, 32);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(51, 13);
             this.label4.TabIndex = 9;
@@ -132,16 +134,16 @@
             // 
             // vScrollBar1
             // 
-            this.vScrollBar1.Location = new System.Drawing.Point(277, 254);
+            this.vScrollBar1.Location = new System.Drawing.Point(399, 254);
             this.vScrollBar1.Name = "vScrollBar1";
-            this.vScrollBar1.Size = new System.Drawing.Size(17, 95);
+            this.vScrollBar1.Size = new System.Drawing.Size(17, 96);
             this.vScrollBar1.TabIndex = 10;
             // 
             // MarvelousForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(458, 387);
+            this.ClientSize = new System.Drawing.Size(431, 387);
             this.Controls.Add(this.vScrollBar1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
