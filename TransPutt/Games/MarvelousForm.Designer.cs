@@ -38,9 +38,10 @@
             this.textBoxText1 = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
+            this.panel1 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownID1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview1)).BeginInit();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // comboBoxLang1
@@ -80,7 +81,7 @@
             // 
             // buttonSave1
             // 
-            this.buttonSave1.Location = new System.Drawing.Point(15, 355);
+            this.buttonSave1.Location = new System.Drawing.Point(12, 372);
             this.buttonSave1.Name = "buttonSave1";
             this.buttonSave1.Size = new System.Drawing.Size(75, 23);
             this.buttonSave1.TabIndex = 4;
@@ -99,7 +100,7 @@
             // 
             // pictureBoxPreview1
             // 
-            this.pictureBoxPreview1.Location = new System.Drawing.Point(12, 254);
+            this.pictureBoxPreview1.Location = new System.Drawing.Point(0, 0);
             this.pictureBoxPreview1.Name = "pictureBoxPreview1";
             this.pictureBoxPreview1.Size = new System.Drawing.Size(384, 96);
             this.pictureBoxPreview1.TabIndex = 6;
@@ -132,23 +133,24 @@
             this.label4.TabIndex = 9;
             this.label4.Text = "Script ID:";
             // 
-            // vScrollBar1
+            // panel1
             // 
-            this.vScrollBar1.Location = new System.Drawing.Point(399, 254);
-            this.vScrollBar1.Name = "vScrollBar1";
-            this.vScrollBar1.Size = new System.Drawing.Size(17, 96);
-            this.vScrollBar1.TabIndex = 10;
+            this.panel1.AutoScroll = true;
+            this.panel1.Controls.Add(this.pictureBoxPreview1);
+            this.panel1.Location = new System.Drawing.Point(12, 259);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(401, 96);
+            this.panel1.TabIndex = 10;
             // 
             // MarvelousForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(431, 387);
-            this.Controls.Add(this.vScrollBar1);
+            this.ClientSize = new System.Drawing.Size(431, 405);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.textBoxText1);
-            this.Controls.Add(this.pictureBoxPreview1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.buttonSave1);
             this.Controls.Add(this.textBoxDesc1);
@@ -160,6 +162,7 @@
             this.Load += new System.EventHandler(this.MarvelousForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownID1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview1)).EndInit();
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -177,6 +180,6 @@
         private System.Windows.Forms.TextBox textBoxText1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.VScrollBar vScrollBar1;
+        private System.Windows.Forms.Panel panel1;
     }
 }

@@ -63,13 +63,16 @@ namespace TransPutt.Games
         private void buttonSave1_Click(object sender, EventArgs e)
         {
             pictureBoxPreview1.Image = RenderText(textBoxText1.Text, lang1, 0);
+            pictureBoxPreview1.Height = pictureBoxPreview1.Image.Height;
         }
 
         private void textBoxText1_TextChanged(object sender, EventArgs e)
         {
             pictureBoxPreview1.Image = RenderText(textBoxText1.Text, lang1, 0);
+            pictureBoxPreview1.Height = pictureBoxPreview1.Image.Height;
         }
 
+        //--Text Functions
         private void LoadLanguage(string lang, out lang outlang)
         {
             outlang = new lang();
@@ -126,8 +129,16 @@ namespace TransPutt.Games
             int maxwidth = 384;
             int line = 0;
             int h_pixel = 0;
-            Bitmap output = new Bitmap(maxwidth, 32 * 3);
 
+            byte[] encoded;
+            PuttScript.Encode(curlang.table, text, out encoded);
+            int detectlines = 1;
+            for (int i = 0; i < encoded.Length; i++)
+            {
+                if (encoded[i] >= 0xF6 && encoded[i] < 0xFC)
+                    detectlines++;
+            }
+            Bitmap output = new Bitmap(maxwidth, 32 * Math.Max(detectlines, 3));
             using (Graphics g = Graphics.FromImage(output))
             {
                 if (style == 0)
@@ -135,9 +146,6 @@ namespace TransPutt.Games
                 else if (style == 1)
                     g.FillRectangle(Brushes.Black, 0, 0, output.Width, output.Height);
             }
-
-            byte[] encoded;
-            PuttScript.Encode(curlang.table, text, out encoded);
 
             for (int i = 0; i < encoded.Length; i++)
             {
