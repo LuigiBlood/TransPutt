@@ -386,14 +386,22 @@ namespace TransPutt.Games
                 g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
                 g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
                 g.Clear(Color.Transparent);
-                g.DrawImage(GraphicsRender.Nintendo.TileFrom2BPP(Program.Subarray(curlang.icons_chr, offset, 0x10), pal), 0, 0);
-                g.DrawImage(GraphicsRender.Nintendo.TileFrom2BPP(Program.Subarray(curlang.icons_chr, offset + 0x10, 0x10), pal), 8, 0);
-                g.DrawImage(GraphicsRender.Nintendo.TileFrom2BPP(Program.Subarray(curlang.icons_chr, offset + 0x20, 0x10), pal), 16, 0);
-                g.DrawImage(GraphicsRender.Nintendo.TileFrom2BPP(Program.Subarray(curlang.icons_chr, offset + 0x30, 0x10), pal), 24, 0);
-                g.DrawImage(GraphicsRender.Nintendo.TileFrom2BPP(Program.Subarray(curlang.icons_chr, offset + 0x100, 0x10), pal), 0, 8);
-                g.DrawImage(GraphicsRender.Nintendo.TileFrom2BPP(Program.Subarray(curlang.icons_chr, offset + 0x110, 0x10), pal), 8, 8);
-                g.DrawImage(GraphicsRender.Nintendo.TileFrom2BPP(Program.Subarray(curlang.icons_chr, offset + 0x120, 0x10), pal), 16, 8);
-                g.DrawImage(GraphicsRender.Nintendo.TileFrom2BPP(Program.Subarray(curlang.icons_chr, offset + 0x130, 0x10), pal), 24, 8);
+                if (id == 0x12 || id == 0x38 || id == 0x42)
+                {
+                    for (int y = 0; y < 4; y++)
+                        for (int x = 0; x < 8; x++)
+                            g.DrawImage(GraphicsRender.Nintendo.TileFrom2BPP(Program.Subarray(curlang.icons_chr, offset + (0x10 * x) + (0x100 * y), 0x10), pal), 8 * x, 8 * y);
+                }
+                else if (id == 0x1A || id == 0x34 || id == 0x56)
+                {
+                    gfx = new Bitmap(16 * 5, 32);
+                }
+                else
+                {
+                    for (int y = 0; y < 2; y++)
+                        for (int x = 0; x < 4; x++)
+                            g.DrawImage(GraphicsRender.Nintendo.TileFrom2BPP(Program.Subarray(curlang.icons_chr, offset + (0x10 * x) + (0x100 * y), 0x10), pal), 8 * x, 8 * y);
+                }
             }
 
             return gfx;
