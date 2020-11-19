@@ -15,16 +15,20 @@ namespace TransPutt.Games
     {
         struct lang
         {
+            public string name;
             public byte[] font_chr;                    //font.bin - 0x00 to 0xEF
             public byte[] kanji_chr;                   //kanji.bin
             public byte[] icons_chr;                   //icons.bin
             public byte[] width_tbl;                   //width.tbl - Char Width Table
             public List<Tuple<string, string>> table;  //table.tbl - Table
             public string[] main_txt;                  //main.txt - Main Text File
+            public bool hasChanged;
         }
 
         lang lang1;
         lang lang2;
+
+        int curIndex = -1;
 
         public MarvelousForm()
         {
@@ -62,7 +66,8 @@ namespace TransPutt.Games
 
         private void buttonSave1_Click(object sender, EventArgs e)
         {
-            UpdatePictureBox(pictureBoxPreview1, textBoxText1, lang1);
+            if (isTextDifferent(textBoxText1, curIndex, lang1))
+                SaveText(textBoxText1, curIndex, lang1);
         }
 
         private void textBoxText1_TextChanged(object sender, EventArgs e)
@@ -70,16 +75,36 @@ namespace TransPutt.Games
             UpdatePictureBox(pictureBoxPreview1, textBoxText1, lang1);
         }
 
+        private void numericUpDownID1_ValueChanged(object sender, EventArgs e)
+        {
+            if (curIndex != -1)
+            {
+                if (isTextDifferent(textBoxText1, curIndex, lang1))
+                {
+                    if (MessageBox.Show("Do you want to save the text?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        SaveText(textBoxText1, curIndex, lang1);
+                    }
+                }
+            }
+            curIndex = (int)numericUpDownID1.Value;
+            UpdateTextBox(textBoxText1, curIndex, lang1);
+        }
+
+
+
         //--Text Functions
         private void LoadLanguage(string lang, out lang outlang)
         {
             outlang = new lang();
+            outlang.name = lang;
             string fullpath = ".\\marvelous\\" + lang + "\\";
             outlang.font_chr = File.ReadAllBytes(fullpath + "font.bin");
             outlang.kanji_chr = File.ReadAllBytes(fullpath + "kanji.bin");
             outlang.icons_chr = File.ReadAllBytes(fullpath + "icons.bin");
             outlang.width_tbl = File.ReadAllBytes(fullpath + "width.tbl");
             PuttScript.GetDictFromFile(fullpath + "table.tbl", 1, out outlang.table);
+            outlang.hasChanged = false;
 
             List<string> list_txt = new List<string>();
             string temp = File.ReadAllText(fullpath + "main.txt");
@@ -106,7 +131,7 @@ namespace TransPutt.Games
                     if (temp.Substring(i, en1.Length) == en1)
                     {
                         i += en1.Length;
-                        list_txt.Add(temp.Substring(lastidx, i - lastidx).Trim());
+                        list_txt.Add(temp.Substring(lastidx, i - lastidx).Trim().Replace("\r\n", "\n"));
                         i--;
                         lastidx = i + 1;
                     }
@@ -116,7 +141,7 @@ namespace TransPutt.Games
                     if (temp.Substring(i, en2.Length) == en2)
                     {
                         i += en2.Length;
-                        list_txt.Add(temp.Substring(lastidx, i - lastidx).Trim());
+                        list_txt.Add(temp.Substring(lastidx, i - lastidx).Trim().Replace("\r\n", "\n"));
                         i--;
                         lastidx = i + 1;
                     }
@@ -126,6 +151,32 @@ namespace TransPutt.Games
             outlang.main_txt = list_txt.ToArray();
             numericUpDownID1.Maximum = list_txt.Count;
             UpdateTextBox(textBoxText1, (int)numericUpDownID1.Value, outlang);
+        }
+
+        private bool isTextDifferent(TextBox textBox, int id, lang inlang)
+        {
+            byte[] encoded_orig;
+            byte[] encoded_new;
+            PuttScript.Encode(inlang.table, inlang.main_txt[id], out encoded_orig);
+            PuttScript.Encode(inlang.table, textBox.Text, out encoded_new);
+
+            return Program.isByteArrayEqual(encoded_orig, encoded_new);
+        }
+
+        private void SaveText(TextBox textBox, int id, lang inlang)
+        {
+            inlang.main_txt[id] = textBox.Text.Replace("\r\n", "\n");
+            inlang.hasChanged = true;
+        }
+
+        private void SaveMainScript(lang inlang)
+        {
+            string temp = "";
+            foreach (string t in inlang.main_txt)
+                temp += t;
+            string fullpath = ".\\marvelous\\" + inlang.name + "\\";
+
+            File.WriteAllText(fullpath + "main.txt", temp);
         }
 
         private void UpdateTextBox(TextBox textBox, int id, lang inlang)
@@ -478,11 +529,6 @@ namespace TransPutt.Games
                 g.DrawImage(GraphicsRender.Nintendo.TileFrom2BPP(dat[3], pal), 8, 8);
             }
             return gfx;
-        }
-
-        private void numericUpDownID1_ValueChanged(object sender, EventArgs e)
-        {
-            UpdateTextBox(textBoxText1, (int)numericUpDownID1.Value, lang1);
         }
     }
 }
