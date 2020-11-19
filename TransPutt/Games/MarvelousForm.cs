@@ -106,7 +106,7 @@ namespace TransPutt.Games
                     if (temp.Substring(i, en1.Length) == en1)
                     {
                         i += en1.Length;
-                        list_txt.Add(temp.Substring(lastidx, i - lastidx).Trim().Replace("\n", "\r\n"));
+                        list_txt.Add(temp.Substring(lastidx, i - lastidx).Trim());
                         i--;
                         lastidx = i + 1;
                     }
@@ -116,7 +116,7 @@ namespace TransPutt.Games
                     if (temp.Substring(i, en2.Length) == en2)
                     {
                         i += en2.Length;
-                        list_txt.Add(temp.Substring(lastidx, i - lastidx).Trim().Replace("\n", "\r\n"));
+                        list_txt.Add(temp.Substring(lastidx, i - lastidx).Trim());
                         i--;
                         lastidx = i + 1;
                     }
@@ -130,7 +130,7 @@ namespace TransPutt.Games
 
         private void UpdateTextBox(TextBox textBox, int id, lang inlang)
         {
-            textBox.Text = inlang.main_txt[id];
+            textBox.Text = inlang.main_txt[id].Replace("\n", "\r\n");
         }
 
         private void UpdatePictureBox(PictureBox pictureBox, TextBox textBox, lang inlang)
