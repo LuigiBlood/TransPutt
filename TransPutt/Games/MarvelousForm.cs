@@ -62,14 +62,12 @@ namespace TransPutt.Games
 
         private void buttonSave1_Click(object sender, EventArgs e)
         {
-            pictureBoxPreview1.Image = RenderText(textBoxText1.Text, lang1, 0);
-            pictureBoxPreview1.Height = pictureBoxPreview1.Image.Height;
+            UpdatePictureBox(pictureBoxPreview1, textBoxText1, lang1);
         }
 
         private void textBoxText1_TextChanged(object sender, EventArgs e)
         {
-            pictureBoxPreview1.Image = RenderText(textBoxText1.Text, lang1, 0);
-            pictureBoxPreview1.Height = pictureBoxPreview1.Image.Height;
+            UpdatePictureBox(pictureBoxPreview1, textBoxText1, lang1);
         }
 
         //--Text Functions
@@ -121,6 +119,12 @@ namespace TransPutt.Games
         private void UpdateTextBox(TextBox textBox, int id, lang inlang)
         {
             textBox.Text = inlang.main_txt[id];
+        }
+
+        private void UpdatePictureBox(PictureBox pictureBox, TextBox textBox, lang inlang)
+        {
+            pictureBox.Image = RenderText(textBox.Text, lang1, 0);
+            pictureBox.Height = pictureBox.Image.Height;
         }
 
         private Bitmap RenderText(string text, lang curlang, int style)
