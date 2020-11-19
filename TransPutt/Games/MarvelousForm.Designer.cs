@@ -65,7 +65,7 @@
             // 
             // numericUpDownID1
             // 
-            this.numericUpDownID1.Location = new System.Drawing.Point(353, 30);
+            this.numericUpDownID1.Location = new System.Drawing.Point(362, 30);
             this.numericUpDownID1.Name = "numericUpDownID1";
             this.numericUpDownID1.Size = new System.Drawing.Size(51, 20);
             this.numericUpDownID1.TabIndex = 2;
@@ -76,7 +76,7 @@
             this.textBoxDesc1.Location = new System.Drawing.Point(12, 90);
             this.textBoxDesc1.Multiline = true;
             this.textBoxDesc1.Name = "textBoxDesc1";
-            this.textBoxDesc1.Size = new System.Drawing.Size(262, 42);
+            this.textBoxDesc1.Size = new System.Drawing.Size(401, 42);
             this.textBoxDesc1.TabIndex = 3;
             // 
             // buttonSave1
@@ -111,7 +111,8 @@
             this.textBoxText1.Location = new System.Drawing.Point(12, 163);
             this.textBoxText1.Multiline = true;
             this.textBoxText1.Name = "textBoxText1";
-            this.textBoxText1.Size = new System.Drawing.Size(262, 74);
+            this.textBoxText1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBoxText1.Size = new System.Drawing.Size(401, 74);
             this.textBoxText1.TabIndex = 7;
             this.textBoxText1.TextChanged += new System.EventHandler(this.textBoxText1_TextChanged);
             // 
@@ -127,7 +128,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(296, 32);
+            this.label4.Location = new System.Drawing.Point(305, 32);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(51, 13);
             this.label4.TabIndex = 9;

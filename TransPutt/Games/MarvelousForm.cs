@@ -83,9 +83,21 @@ namespace TransPutt.Games
 
             List<string> list_txt = new List<string>();
             string temp = File.ReadAllText(fullpath + "main.txt");
-            string en1 = "[en1]";
-            string en2 = "[en2]";
 
+            //Find End Commands
+            string en1 = "";
+            string en2 = "";
+            for (int i = 0; i < outlang.table.Count; i++)
+            {
+                if (outlang.table[i].Item1 == "FA")
+                    en1 = outlang.table[i].Item2;
+                if (outlang.table[i].Item1 == "FB")
+                    en2 = outlang.table[i].Item2;
+                if (en1 != "" && en2 != "")
+                    break;
+            }
+
+            //Put all script in string array, seperated by end commands
             int lastidx = 0;
             for (int i = 0; i < temp.Length; i++)
             {
@@ -94,7 +106,7 @@ namespace TransPutt.Games
                     if (temp.Substring(i, en1.Length) == en1)
                     {
                         i += en1.Length;
-                        list_txt.Add(temp.Substring(lastidx, i - lastidx).Trim());
+                        list_txt.Add(temp.Substring(lastidx, i - lastidx).Trim().Replace("\n", "\r\n"));
                         i--;
                         lastidx = i + 1;
                     }
@@ -104,7 +116,7 @@ namespace TransPutt.Games
                     if (temp.Substring(i, en2.Length) == en2)
                     {
                         i += en2.Length;
-                        list_txt.Add(temp.Substring(lastidx, i - lastidx).Trim());
+                        list_txt.Add(temp.Substring(lastidx, i - lastidx).Trim().Replace("\n", "\r\n"));
                         i--;
                         lastidx = i + 1;
                     }
