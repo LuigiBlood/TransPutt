@@ -56,9 +56,12 @@ namespace TransPutt.Games
                     continue;
                 string[] split = path.Split(Path.DirectorySeparatorChar);
                 comboBoxLang1.Items.Add(split[split.Length - 1]);
+                comboBoxLang2.Items.Add(split[split.Length - 1]);
             }
 
             comboBoxLang1.SelectedIndex = 0;
+            comboBoxLang2.SelectedIndex = 0;
+            comboBoxStyle1.SelectedIndex = 0;
         }
 
         private void comboBoxLang1_SelectedIndexChanged(object sender, EventArgs e)
@@ -82,6 +85,14 @@ namespace TransPutt.Games
             UpdateNotesBox(textBoxDesc1, curIndex, lang1);
             UpdatePictureBox(pictureBoxPreview1, textBoxText1, lang1);
             UpdateSaveAllButton(buttonSaveAll1);
+        }
+
+        private void comboBoxLang2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            LoadLanguage((string)comboBoxLang2.SelectedItem, out lang2);
+            UpdateTextBox(textBoxText2, curIndex, lang2);
+            UpdateNotesBox(textBoxDesc2, curIndex, lang2);
+            UpdatePictureBox(pictureBoxPreview2, textBoxText2, lang2);
         }
 
         private void buttonSave1_Click(object sender, EventArgs e)
@@ -114,6 +125,10 @@ namespace TransPutt.Games
             UpdateTextBox(textBoxText1, curIndex, lang1);
             UpdateNotesBox(textBoxDesc1, curIndex, lang1);
             UpdateSaveAllButton(buttonSaveAll1);
+
+            UpdateTextBox(textBoxText2, curIndex, lang2);
+            UpdateNotesBox(textBoxDesc2, curIndex, lang2);
+            UpdatePictureBox(pictureBoxPreview2, textBoxText2, lang2);
         }
 
         private void buttonSaveAll1_Click(object sender, EventArgs e)
@@ -140,6 +155,12 @@ namespace TransPutt.Games
                         break;
                 }
             }
+        }
+
+        private void comboBoxStyle1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdatePictureBox(pictureBoxPreview1, textBoxText1, lang1);
+            UpdatePictureBox(pictureBoxPreview2, textBoxText2, lang2);
         }
 
 
@@ -288,7 +309,8 @@ namespace TransPutt.Games
 
         private void UpdatePictureBox(PictureBox pictureBox, TextBox textBox, lang inlang)
         {
-            pictureBox.Image = RenderText(textBox.Text, lang1, 0);
+            pictureBox.Image = RenderText(textBox.Text, inlang, comboBoxStyle1.SelectedIndex);
+            pictureBox.Width = pictureBox.Image.Width;
             pictureBox.Height = pictureBox.Image.Height;
         }
 
@@ -300,7 +322,13 @@ namespace TransPutt.Games
         private Bitmap RenderText(string text, lang curlang, int style)
         {
             //Styles: 1 = Regular Text Box (black on white), 2 = Small Text (white on black), 3 = With border (black border, white font)
-            int maxwidth = 384;
+            int maxwidth = 0;
+            if (style == 0)
+                maxwidth = 352;
+            else if (style == 1)
+                maxwidth = 384;
+            else
+                maxwidth = 256;
             int line = 0;
             int h_pixel = 0;
 
@@ -319,6 +347,8 @@ namespace TransPutt.Games
                     g.FillRectangle(Brushes.White, 0, 0, output.Width, output.Height);
                 else if (style == 1)
                     g.FillRectangle(Brushes.Black, 0, 0, output.Width, output.Height);
+                else
+                    g.FillRectangle(Brushes.White, 0, 0, output.Width, output.Height);
             }
 
             for (int i = 0; i < encoded.Length; i++)
