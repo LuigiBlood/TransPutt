@@ -39,6 +39,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.buttonSaveAll1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownID1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview1)).BeginInit();
             this.panel1.SuspendLayout();
@@ -81,7 +82,7 @@
             // 
             // buttonSave1
             // 
-            this.buttonSave1.Location = new System.Drawing.Point(12, 372);
+            this.buttonSave1.Location = new System.Drawing.Point(12, 371);
             this.buttonSave1.Name = "buttonSave1";
             this.buttonSave1.Size = new System.Drawing.Size(75, 23);
             this.buttonSave1.TabIndex = 4;
@@ -121,9 +122,9 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(12, 9);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(67, 13);
+            this.label3.Size = new System.Drawing.Size(79, 13);
             this.label3.TabIndex = 8;
-            this.label3.Text = "Language 1:";
+            this.label3.Text = "Edit Language:";
             // 
             // label4
             // 
@@ -143,11 +144,22 @@
             this.panel1.Size = new System.Drawing.Size(401, 96);
             this.panel1.TabIndex = 10;
             // 
+            // buttonSaveAll1
+            // 
+            this.buttonSaveAll1.Location = new System.Drawing.Point(137, 371);
+            this.buttonSaveAll1.Name = "buttonSaveAll1";
+            this.buttonSaveAll1.Size = new System.Drawing.Size(75, 23);
+            this.buttonSaveAll1.TabIndex = 11;
+            this.buttonSaveAll1.Text = "Save to File";
+            this.buttonSaveAll1.UseVisualStyleBackColor = true;
+            this.buttonSaveAll1.Click += new System.EventHandler(this.buttonSaveAll1_Click);
+            // 
             // MarvelousForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(431, 405);
+            this.ClientSize = new System.Drawing.Size(431, 432);
+            this.Controls.Add(this.buttonSaveAll1);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
@@ -160,6 +172,7 @@
             this.Controls.Add(this.comboBoxLang1);
             this.Name = "MarvelousForm";
             this.Text = "Marvelous Text Editor";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MarvelousForm_FormClosing);
             this.Load += new System.EventHandler(this.MarvelousForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownID1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview1)).EndInit();
@@ -182,5 +195,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button buttonSaveAll1;
     }
 }

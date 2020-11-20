@@ -22,11 +22,11 @@ namespace TransPutt.Games
             public byte[] width_tbl;                   //width.tbl - Char Width Table
             public List<Tuple<string, string>> table;  //table.tbl - Table
             public string[] main_txt;                  //main.txt - Main Text File
-            public bool hasChanged;
         }
 
         lang lang1;
         lang lang2;
+        public bool hasChanged;
 
         int curIndex = -1;
 
@@ -61,18 +61,32 @@ namespace TransPutt.Games
 
         private void comboBoxLang1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (curIndex != -1 && (hasChanged == true || isTextDifferent(textBoxText1, curIndex, lang1)))
+            {
+                switch (MessageBox.Show("Would you like to quit & save the full main script of language \"" + lang1.name + "\"?", "Save?", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+                {
+                    case DialogResult.Yes:
+                        if (isTextDifferent(textBoxText1, curIndex, lang1))
+                            SaveText(textBoxText1, curIndex, lang1);
+                        SaveMainScript(lang1);
+                        break;
+                }
+            }
             LoadLanguage((string)comboBoxLang1.SelectedItem, out lang1);
+            UpdateSaveAllButton(buttonSaveAll1);
         }
 
         private void buttonSave1_Click(object sender, EventArgs e)
         {
             if (isTextDifferent(textBoxText1, curIndex, lang1))
                 SaveText(textBoxText1, curIndex, lang1);
+            UpdateSaveAllButton(buttonSaveAll1);
         }
 
         private void textBoxText1_TextChanged(object sender, EventArgs e)
         {
             UpdatePictureBox(pictureBoxPreview1, textBoxText1, lang1);
+            UpdateSaveAllButton(buttonSaveAll1);
         }
 
         private void numericUpDownID1_ValueChanged(object sender, EventArgs e)
@@ -89,6 +103,33 @@ namespace TransPutt.Games
             }
             curIndex = (int)numericUpDownID1.Value;
             UpdateTextBox(textBoxText1, curIndex, lang1);
+            UpdateSaveAllButton(buttonSaveAll1);
+        }
+
+        private void buttonSaveAll1_Click(object sender, EventArgs e)
+        {
+            if (isTextDifferent(textBoxText1, curIndex, lang1))
+                SaveText(textBoxText1, curIndex, lang1);
+            SaveMainScript(lang1);
+            UpdateSaveAllButton(buttonSaveAll1);
+        }
+
+        private void MarvelousForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (hasChanged == true || isTextDifferent(textBoxText1, curIndex, lang1))
+            {
+                switch (MessageBox.Show("Would you like to quit & save the full main script of language \"" + lang1.name + "\"?\nCancel to not quit the editor.", "Save?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
+                {
+                    case DialogResult.Yes:
+                        if (isTextDifferent(textBoxText1, curIndex, lang1))
+                            SaveText(textBoxText1, curIndex, lang1);
+                        SaveMainScript(lang1);
+                        break;
+                    case DialogResult.Cancel:
+                        e.Cancel = true;
+                        break;
+                }
+            }
         }
 
 
@@ -104,7 +145,7 @@ namespace TransPutt.Games
             outlang.icons_chr = File.ReadAllBytes(fullpath + "icons.bin");
             outlang.width_tbl = File.ReadAllBytes(fullpath + "width.tbl");
             PuttScript.GetDictFromFile(fullpath + "table.tbl", 1, out outlang.table);
-            outlang.hasChanged = false;
+            hasChanged = false;
 
             List<string> list_txt = new List<string>();
             string temp = File.ReadAllText(fullpath + "main.txt");
@@ -150,7 +191,8 @@ namespace TransPutt.Games
 
             outlang.main_txt = list_txt.ToArray();
             numericUpDownID1.Maximum = list_txt.Count;
-            UpdateTextBox(textBoxText1, (int)numericUpDownID1.Value, outlang);
+            curIndex = (int)numericUpDownID1.Value;
+            UpdateTextBox(textBoxText1, curIndex, outlang);
         }
 
         private bool isTextDifferent(TextBox textBox, int id, lang inlang)
@@ -166,17 +208,21 @@ namespace TransPutt.Games
         private void SaveText(TextBox textBox, int id, lang inlang)
         {
             inlang.main_txt[id] = textBox.Text.Replace("\r\n", "\n");
-            inlang.hasChanged = true;
+            hasChanged = true;
         }
 
         private void SaveMainScript(lang inlang)
         {
+            if (isTextDifferent(textBoxText1, curIndex, lang1))
+                SaveText(textBoxText1, curIndex, lang1);
+
             string temp = "";
             foreach (string t in inlang.main_txt)
-                temp += t;
+                temp += "\n" + t;
             string fullpath = ".\\marvelous\\" + inlang.name + "\\";
 
             File.WriteAllText(fullpath + "main.txt", temp);
+            hasChanged = false;
         }
 
         private void UpdateTextBox(TextBox textBox, int id, lang inlang)
@@ -188,6 +234,11 @@ namespace TransPutt.Games
         {
             pictureBox.Image = RenderText(textBox.Text, lang1, 0);
             pictureBox.Height = pictureBox.Image.Height;
+        }
+
+        private void UpdateSaveAllButton(Button button)
+        {
+            button.Enabled = hasChanged || isTextDifferent(textBoxText1, curIndex, lang1);
         }
 
         private Bitmap RenderText(string text, lang curlang, int style)
