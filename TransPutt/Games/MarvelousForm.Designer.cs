@@ -244,7 +244,7 @@
             this.comboBoxStyle1.FormattingEnabled = true;
             this.comboBoxStyle1.Items.AddRange(new object[] {
             "Normal Text",
-            "Context Text (2 Lines)",
+            "In-Game Text (2 Lines)",
             "Item Text (1 Line)"});
             this.comboBoxStyle1.Location = new System.Drawing.Point(455, 29);
             this.comboBoxStyle1.Name = "comboBoxStyle1";
