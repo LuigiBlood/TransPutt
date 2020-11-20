@@ -22,6 +22,7 @@ namespace TransPutt.Games
             public byte[] width_tbl;                   //width.tbl - Char Width Table
             public List<Tuple<string, string>> table;  //table.tbl - Table
             public string[] main_txt;                  //main.txt - Main Text File
+            public string[] main_end;                  //Keeps all End Commands in mind
         }
 
         lang lang1;
@@ -148,6 +149,7 @@ namespace TransPutt.Games
             hasChanged = false;
 
             List<string> list_txt = new List<string>();
+            List<string> list_end = new List<string>();
             string temp = File.ReadAllText(fullpath + "main.txt");
 
             //Find End Commands
@@ -171,9 +173,10 @@ namespace TransPutt.Games
                 {
                     if (temp.Substring(i, en1.Length) == en1)
                     {
-                        i += en1.Length;
-                        list_txt.Add(temp.Substring(lastidx, i - lastidx).Trim().Replace("\r\n", "\n"));
                         i--;
+                        list_txt.Add(temp.Substring(lastidx, i - lastidx).Trim().Replace("\r\n", "\n"));
+                        i += en1.Length;
+                        list_end.Add(en1);
                         lastidx = i + 1;
                     }
                 }
@@ -181,15 +184,17 @@ namespace TransPutt.Games
                 {
                     if (temp.Substring(i, en2.Length) == en2)
                     {
-                        i += en2.Length;
-                        list_txt.Add(temp.Substring(lastidx, i - lastidx).Trim().Replace("\r\n", "\n"));
                         i--;
+                        list_txt.Add(temp.Substring(lastidx, i - lastidx).Trim().Replace("\r\n", "\n"));
+                        i += en2.Length;
+                        list_end.Add(en2);
                         lastidx = i + 1;
                     }
                 }
             }
 
             outlang.main_txt = list_txt.ToArray();
+            outlang.main_end = list_end.ToArray();
             numericUpDownID1.Maximum = list_txt.Count;
             curIndex = (int)numericUpDownID1.Value;
             UpdateTextBox(textBoxText1, curIndex, outlang);
@@ -207,7 +212,20 @@ namespace TransPutt.Games
 
         private void SaveText(TextBox textBox, int id, lang inlang)
         {
-            inlang.main_txt[id] = textBox.Text.Replace("\r\n", "\n");
+            //Find End Commands
+            string en1 = "";
+            string en2 = "";
+            for (int i = 0; i < inlang.table.Count; i++)
+            {
+                if (inlang.table[i].Item1 == "FA")
+                    en1 = inlang.table[i].Item2;
+                if (inlang.table[i].Item1 == "FB")
+                    en2 = inlang.table[i].Item2;
+                if (en1 != "" && en2 != "")
+                    break;
+            }
+
+            inlang.main_txt[id] = textBox.Text.Replace(en1, "").Replace(en2, "").Replace("\r\n", "\n");
             hasChanged = true;
         }
 
@@ -217,8 +235,8 @@ namespace TransPutt.Games
                 SaveText(textBoxText1, curIndex, lang1);
 
             string temp = "";
-            foreach (string t in inlang.main_txt)
-                temp += "\n" + t;
+            for (int i = 0; i < inlang.main_txt.Length; i++)
+                temp += "\n" + inlang.main_txt[i] + "\n" + inlang.main_end[i] + "\n";
             string fullpath = ".\\marvelous\\" + inlang.name + "\\";
 
             File.WriteAllText(fullpath + "main.txt", temp);
