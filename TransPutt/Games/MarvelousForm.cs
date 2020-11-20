@@ -23,6 +23,7 @@ namespace TransPutt.Games
             public List<Tuple<string, string>> table;  //table.tbl - Table
             public string[] main_txt;                  //main.txt - Main Text File
             public string[] main_end;                  //Keeps all End Commands in mind
+            public string[] notes;                     //notes.txt - Notes
         }
 
         lang lang1;
@@ -62,25 +63,31 @@ namespace TransPutt.Games
 
         private void comboBoxLang1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (curIndex != -1 && (hasChanged == true || isTextDifferent(textBoxText1, curIndex, lang1)))
+            if (curIndex != -1 && (hasChanged == true || isTextDifferent(textBoxText1, curIndex, lang1) || (lang1.notes[curIndex] != textBoxDesc1.Text.Replace("\r\n", "\\"))))
             {
                 switch (MessageBox.Show("Would you like to quit & save the full main script of language \"" + lang1.name + "\"?", "Save?", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
                 {
                     case DialogResult.Yes:
-                        if (isTextDifferent(textBoxText1, curIndex, lang1))
-                            SaveText(textBoxText1, curIndex, lang1);
+                        SaveText(textBoxText1, curIndex, lang1);
+                        SaveNote(textBoxDesc1, curIndex, lang1);
                         SaveMainScript(lang1);
                         break;
                 }
             }
             LoadLanguage((string)comboBoxLang1.SelectedItem, out lang1);
+
+            numericUpDownID1.Maximum = lang1.main_txt.Length;
+            curIndex = (int)numericUpDownID1.Value;
+            UpdateTextBox(textBoxText1, curIndex, lang1);
+            UpdateNotesBox(textBoxDesc1, curIndex, lang1);
+            UpdatePictureBox(pictureBoxPreview1, textBoxText1, lang1);
             UpdateSaveAllButton(buttonSaveAll1);
         }
 
         private void buttonSave1_Click(object sender, EventArgs e)
         {
-            if (isTextDifferent(textBoxText1, curIndex, lang1))
-                SaveText(textBoxText1, curIndex, lang1);
+            SaveText(textBoxText1, curIndex, lang1);
+            SaveNote(textBoxDesc1, curIndex, lang1);
             UpdateSaveAllButton(buttonSaveAll1);
         }
 
@@ -94,36 +101,38 @@ namespace TransPutt.Games
         {
             if (curIndex != -1)
             {
-                if (isTextDifferent(textBoxText1, curIndex, lang1))
+                if (isTextDifferent(textBoxText1, curIndex, lang1) || (lang1.notes[curIndex] != textBoxDesc1.Text.Replace("\r\n", "\\")))
                 {
-                    if (MessageBox.Show("Do you want to save the text?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    if (MessageBox.Show("Do you want to save the text & notes?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
                         SaveText(textBoxText1, curIndex, lang1);
+                        SaveNote(textBoxDesc1, curIndex, lang1);
                     }
                 }
             }
             curIndex = (int)numericUpDownID1.Value;
             UpdateTextBox(textBoxText1, curIndex, lang1);
+            UpdateNotesBox(textBoxDesc1, curIndex, lang1);
             UpdateSaveAllButton(buttonSaveAll1);
         }
 
         private void buttonSaveAll1_Click(object sender, EventArgs e)
         {
-            if (isTextDifferent(textBoxText1, curIndex, lang1))
-                SaveText(textBoxText1, curIndex, lang1);
+            SaveText(textBoxText1, curIndex, lang1);
+            SaveNote(textBoxDesc1, curIndex, lang1);
             SaveMainScript(lang1);
             UpdateSaveAllButton(buttonSaveAll1);
         }
 
         private void MarvelousForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (hasChanged == true || isTextDifferent(textBoxText1, curIndex, lang1))
+            if (hasChanged == true || isTextDifferent(textBoxText1, curIndex, lang1) || (lang1.notes[curIndex] != textBoxDesc1.Text.Replace("\r\n", "\\")))
             {
-                switch (MessageBox.Show("Would you like to quit & save the full main script of language \"" + lang1.name + "\"?\nCancel to not quit the editor.", "Save?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
+                switch (MessageBox.Show("Would you like to close & save the full main script and notes of language \"" + lang1.name + "\"?\nCancel to not close the editor.", "Save?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
                 {
                     case DialogResult.Yes:
-                        if (isTextDifferent(textBoxText1, curIndex, lang1))
-                            SaveText(textBoxText1, curIndex, lang1);
+                        SaveText(textBoxText1, curIndex, lang1);
+                        SaveNote(textBoxDesc1, curIndex, lang1);
                         SaveMainScript(lang1);
                         break;
                     case DialogResult.Cancel:
@@ -195,9 +204,21 @@ namespace TransPutt.Games
 
             outlang.main_txt = list_txt.ToArray();
             outlang.main_end = list_end.ToArray();
-            numericUpDownID1.Maximum = list_txt.Count;
-            curIndex = (int)numericUpDownID1.Value;
-            UpdateTextBox(textBoxText1, curIndex, outlang);
+
+            outlang.notes = new string[list_txt.Count];
+            string[] temp_notes;
+            if (File.Exists(fullpath + "notes.txt"))
+                temp_notes = File.ReadAllLines(fullpath + "notes.txt");
+            else
+                temp_notes = new string[0];
+
+            for (int i = 0; i < outlang.notes.Length; i++)
+            {
+                if (i < temp_notes.Length)
+                    outlang.notes[i] = temp_notes[i];
+                else
+                    outlang.notes[i] = "";
+            }
         }
 
         private bool isTextDifferent(TextBox textBox, int id, lang inlang)
@@ -210,8 +231,20 @@ namespace TransPutt.Games
             return Program.isByteArrayEqual(encoded_orig, encoded_new);
         }
 
+        private void SaveNote(TextBox textBox, int id, lang inlang)
+        {
+            if (inlang.notes[id] == textBox.Text.Replace("\r\n", "\\"))
+                return;
+
+            inlang.notes[id] = textBox.Text.Replace("\r\n", "\\");
+            hasChanged = true;
+        }
+
         private void SaveText(TextBox textBox, int id, lang inlang)
         {
+            if (!isTextDifferent(textBoxText1, curIndex, lang1))
+                return;
+
             //Find End Commands
             string en1 = "";
             string en2 = "";
@@ -231,16 +264,21 @@ namespace TransPutt.Games
 
         private void SaveMainScript(lang inlang)
         {
-            if (isTextDifferent(textBoxText1, curIndex, lang1))
-                SaveText(textBoxText1, curIndex, lang1);
-
             string temp = "";
             for (int i = 0; i < inlang.main_txt.Length; i++)
                 temp += "\n" + inlang.main_txt[i] + "\n" + inlang.main_end[i] + "\n";
             string fullpath = ".\\marvelous\\" + inlang.name + "\\";
 
             File.WriteAllText(fullpath + "main.txt", temp);
+            File.WriteAllLines(fullpath + "notes.txt", inlang.notes);
             hasChanged = false;
+
+            MessageBox.Show(inlang.name + "\\main.txt and notes.txt have been updated.");
+        }
+
+        private void UpdateNotesBox(TextBox textBox, int id, lang inlang)
+        {
+            textBox.Text = inlang.notes[id].Replace("\\", "\r\n");
         }
 
         private void UpdateTextBox(TextBox textBox, int id, lang inlang)
