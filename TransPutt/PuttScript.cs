@@ -177,11 +177,12 @@ namespace TransPutt
             return 0;
         }
 
-        public static int Encode(List<Tuple<string, string>> dict, string[] text_in, out byte[] output)
+        public static int Encode(List<Tuple<string, string>> dict, string[] text_in, out byte[] output, out string errorout)
         {
             //Input File = Text
             //Key = UTF8, Value = Hex
 
+            errorout = "";
             //Convert to Bin
             List<byte> bin_out = new List<byte>();
             output = new byte[0];
@@ -236,8 +237,8 @@ namespace TransPutt
 
                     if (index_use == -1)
                     {
-                        Console.WriteLine("ERROR:\nInput file line " + (i + 1).ToString() + ":\n\"" + text_in[i] + "\" not defined in table");
-                        Console.WriteLine("^".PadLeft(c + 2));
+                        errorout += ("ERROR:\nInput file line " + (i + 1).ToString() + ":\r\n\"" + text_in[i] + "\" not defined in table");
+                        errorout += "\r\n" + ("^".PadLeft(c + 2));
                         return 1;
                     }
 
@@ -272,10 +273,10 @@ namespace TransPutt
             return 0;
         }
 
-        public static int Encode(List<Tuple<string, string>> dict, string text_in, out byte[] output)
+        public static int Encode(List<Tuple<string, string>> dict, string text_in, out byte[] output, out string errorout)
         {
             string[] text = text_in.Replace("\r\n", "\n").Split('\n');
-            return Encode(dict, text, out output);
+            return Encode(dict, text, out output, out errorout);
         }
     }
 }

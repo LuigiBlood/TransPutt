@@ -181,6 +181,19 @@ namespace TransPutt.Games
             UpdateSaveAllButton();
         }
 
+        private void buttonRevert1_Click(object sender, EventArgs e)
+        {
+            UpdateTextBox(textBoxText1, curIndex, lang1);
+            UpdateNotesBox(textBoxDesc1, curIndex, lang1);
+            UpdateSaveAllButton();
+
+            UpdateTextBox(textBoxText2, curIndex, lang2);
+            UpdateNotesBox(textBoxDesc2, curIndex, lang2);
+            UpdatePictureBox(pictureBoxPreview2, textBoxText2, lang2);
+
+            toolStripStatusLabel1.Text = "Reverted ID " + curIndex;
+        }
+
 
 
         //--Text Functions
@@ -258,14 +271,17 @@ namespace TransPutt.Games
                 else
                     outlang.notes[i] = "";
             }
+
+            toolStripStatusLabel1.Text = "Loaded Language " + lang;
         }
 
         private bool isTextDifferent(TextBox textBox, int id, lang inlang)
         {
             byte[] encoded_orig;
             byte[] encoded_new;
-            PuttScript.Encode(inlang.table, inlang.main_txt[id], out encoded_orig);
-            PuttScript.Encode(inlang.table, textBox.Text, out encoded_new);
+            string errorout = "";
+            PuttScript.Encode(inlang.table, inlang.main_txt[id], out encoded_orig, out errorout);
+            PuttScript.Encode(inlang.table, textBox.Text, out encoded_new, out errorout);
 
             return Program.isByteArrayEqual(encoded_orig, encoded_new);
         }
@@ -277,6 +293,7 @@ namespace TransPutt.Games
 
             inlang.notes[id] = textBox.Text.Replace("\r\n", "\\");
             hasChanged = true;
+            toolStripStatusLabel1.Text = "Saved Note ID " + id + " to memory.";
         }
 
         private void SaveText(TextBox textBox, int id, lang inlang)
@@ -299,10 +316,12 @@ namespace TransPutt.Games
 
             inlang.main_txt[id] = textBox.Text.Replace(en1, "").Replace(en2, "").Replace("\r\n", "\n");
             hasChanged = true;
+            toolStripStatusLabel1.Text = "Saved Text ID " + id + " to memory.";
         }
 
         private void SaveMainScript(lang inlang)
         {
+            toolStripStatusLabel1.Text = "Saving Full Script and Notes...";
             string temp = "";
             for (int i = 0; i < inlang.main_txt.Length; i++)
                 temp += "\n" + inlang.main_txt[i] + "\n" + inlang.main_end[i] + "\n";
@@ -312,7 +331,8 @@ namespace TransPutt.Games
             File.WriteAllLines(fullpath + "notes.txt", inlang.notes);
             hasChanged = false;
 
-            MessageBox.Show(inlang.name + "\\main.txt and notes.txt have been updated.");
+            //MessageBox.Show(inlang.name + "\\main.txt and notes.txt have been updated.");
+            toolStripStatusLabel1.Text = inlang.name + "\\main.txt and notes.txt have been updated.";
         }
 
         private void UpdateNotesBox(TextBox textBox, int id, lang inlang)
@@ -352,7 +372,8 @@ namespace TransPutt.Games
             int h_pixel = 0;
 
             byte[] encoded;
-            PuttScript.Encode(curlang.table, text, out encoded);
+            string errorout = "";
+            int error = PuttScript.Encode(curlang.table, text, out encoded, out errorout);
             int detectlines = 1;
             for (int i = 0; i < encoded.Length; i++)
             {
@@ -368,79 +389,84 @@ namespace TransPutt.Games
                     g.FillRectangle(Brushes.Black, 0, 0, output.Width, output.Height);
                 else
                     g.FillRectangle(Brushes.White, 0, 0, output.Width, output.Height);
-            }
 
-            for (int i = 0; i < encoded.Length; i++)
+                if (error != 0)
+                    g.DrawString(errorout, new Font(FontFamily.GenericMonospace, 8), Brushes.Red, 0, 0);
+            }
+            if (error == 0)
             {
-                Bitmap char_gfx = new Bitmap(32, 16);
-                if (encoded[i] < 0xF0)
+                for (int i = 0; i < encoded.Length; i++)
                 {
-                    char_gfx = RenderChar(encoded[i], curlang, style);
-                }
-                else if (encoded[i] == 0xF0)
-                {
-                    char_gfx = new Bitmap(curlang.width_tbl[0xF0], 32);
-                }
-                else if (encoded[i] < 0xF4)
-                {
-                    continue;
-                }
-                else if (encoded[i] == 0xF4)
-                {
-                    i++;
-                    char_gfx = RenderChar(0x300 + encoded[i], curlang, style);
-                }
-                else if (encoded[i] == 0xF5)
-                {
-                    i += 2;
-                    continue;
-                }
-                else if (encoded[i] < 0xFA)
-                {
-                    line++;
-                    h_pixel = 0;
-                    continue;
-                }
-                else if (encoded[i] < 0xFC)
-                {
-                    break;
-                }
-                else if (encoded[i] == 0xFC)
-                {
-                    i++;
-                    char_gfx = RenderChar(0x200 + encoded[i], curlang, style);
-                }
-                else if (encoded[i] == 0xFD)
-                {
-                    i++;
-                    char_gfx = RenderChar(0x100 + encoded[i], curlang, style);
-                }
-                else if (encoded[i] == 0xFE)
-                {
-                    i++;
-                    if (encoded[i] == 0x6D)
+                    Bitmap char_gfx = new Bitmap(32, 16);
+                    if (encoded[i] < 0xF0)
+                    {
+                        char_gfx = RenderChar(encoded[i], curlang, style);
+                    }
+                    else if (encoded[i] == 0xF0)
+                    {
+                        char_gfx = new Bitmap(curlang.width_tbl[0xF0], 32);
+                    }
+                    else if (encoded[i] < 0xF4)
+                    {
+                        continue;
+                    }
+                    else if (encoded[i] == 0xF4)
                     {
                         i++;
-                        char_gfx = RenderIcon(encoded[i], curlang, style);
+                        char_gfx = RenderChar(0x300 + encoded[i], curlang, style);
                     }
-                    else
+                    else if (encoded[i] == 0xF5)
                     {
-                        char_gfx = new Bitmap(16, 32);
+                        i += 2;
+                        continue;
                     }
-                    if ((h_pixel % 16) != 0)
-                        h_pixel += 16 - (h_pixel % 16);
+                    else if (encoded[i] < 0xFA)
+                    {
+                        line++;
+                        h_pixel = 0;
+                        continue;
+                    }
+                    else if (encoded[i] < 0xFC)
+                    {
+                        break;
+                    }
+                    else if (encoded[i] == 0xFC)
+                    {
+                        i++;
+                        char_gfx = RenderChar(0x200 + encoded[i], curlang, style);
+                    }
+                    else if (encoded[i] == 0xFD)
+                    {
+                        i++;
+                        char_gfx = RenderChar(0x100 + encoded[i], curlang, style);
+                    }
+                    else if (encoded[i] == 0xFE)
+                    {
+                        i++;
+                        if (encoded[i] == 0x6D)
+                        {
+                            i++;
+                            char_gfx = RenderIcon(encoded[i], curlang, style);
+                        }
+                        else
+                        {
+                            char_gfx = new Bitmap(16, 32);
+                        }
+                        if ((h_pixel % 16) != 0)
+                            h_pixel += 16 - (h_pixel % 16);
 
-                }
-                else if (encoded[i] == 0xFF)
-                {
-                    break;
-                }
+                    }
+                    else if (encoded[i] == 0xFF)
+                    {
+                        break;
+                    }
 
-                using (Graphics g = Graphics.FromImage(output))
-                {
-                    g.DrawImageUnscaled(char_gfx, h_pixel, line * 32);
+                    using (Graphics g = Graphics.FromImage(output))
+                    {
+                        g.DrawImageUnscaled(char_gfx, h_pixel, line * 32);
+                    }
+                    h_pixel += char_gfx.Width;
                 }
-                h_pixel += char_gfx.Width;
             }
 
             return output;

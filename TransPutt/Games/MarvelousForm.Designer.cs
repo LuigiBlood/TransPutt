@@ -54,12 +54,16 @@
             this.saveToFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nextIDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label8 = new System.Windows.Forms.Label();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.buttonRevert1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownID1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview1)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview2)).BeginInit();
             this.menuStrip1.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // comboBoxLang1
@@ -164,7 +168,7 @@
             // 
             // buttonSaveAll1
             // 
-            this.buttonSaveAll1.Location = new System.Drawing.Point(159, 390);
+            this.buttonSaveAll1.Location = new System.Drawing.Point(168, 390);
             this.buttonSaveAll1.Name = "buttonSaveAll1";
             this.buttonSaveAll1.Size = new System.Drawing.Size(75, 23);
             this.buttonSaveAll1.TabIndex = 11;
@@ -265,7 +269,7 @@
             this.fileToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(870, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(864, 24);
             this.menuStrip1.TabIndex = 19;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -303,11 +307,40 @@
             this.label8.TabIndex = 20;
             this.label8.Text = "Style:";
             // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel1});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 419);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(864, 22);
+            this.statusStrip1.SizingGrip = false;
+            this.statusStrip1.TabIndex = 21;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(62, 17);
+            this.toolStripStatusLabel1.Text = "Text Editor";
+            // 
+            // buttonRevert1
+            // 
+            this.buttonRevert1.Location = new System.Drawing.Point(298, 390);
+            this.buttonRevert1.Name = "buttonRevert1";
+            this.buttonRevert1.Size = new System.Drawing.Size(115, 23);
+            this.buttonRevert1.TabIndex = 22;
+            this.buttonRevert1.Text = "Revert From Memory";
+            this.buttonRevert1.UseVisualStyleBackColor = true;
+            this.buttonRevert1.Click += new System.EventHandler(this.buttonRevert1_Click);
+            // 
             // MarvelousForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(870, 422);
+            this.ClientSize = new System.Drawing.Size(864, 441);
+            this.Controls.Add(this.buttonRevert1);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.comboBoxStyle1);
             this.Controls.Add(this.label5);
@@ -329,8 +362,11 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.comboBoxLang1);
             this.Controls.Add(this.menuStrip1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MainMenuStrip = this.menuStrip1;
+            this.MaximizeBox = false;
             this.Name = "MarvelousForm";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Marvelous Text Editor";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MarvelousForm_FormClosing);
             this.Load += new System.EventHandler(this.MarvelousForm_Load);
@@ -341,6 +377,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview2)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -374,5 +412,8 @@
         private System.Windows.Forms.ToolStripMenuItem saveToFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem nextIDToolStripMenuItem;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.Button buttonRevert1;
     }
 }
