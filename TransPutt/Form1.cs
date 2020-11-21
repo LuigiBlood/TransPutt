@@ -38,7 +38,9 @@ namespace TransPutt
 
         private void buttonStart_Click(object sender, EventArgs e)
         {
+            this.Hide();
             Program.Launch((string)treeView1.SelectedNode.Tag);
+            this.Show();
         }
     }
 }
