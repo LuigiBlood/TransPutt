@@ -50,20 +50,20 @@
             this.comboBoxLang2 = new System.Windows.Forms.ComboBox();
             this.comboBoxStyle1 = new System.Windows.Forms.ComboBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveToFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.nextIDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.label8 = new System.Windows.Forms.Label();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.buttonRevert1 = new System.Windows.Forms.Button();
-            this.revertFromMemoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToMemoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveToFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.revertFromMemoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.nextIDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.shortcutsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.line1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.line2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.line3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.scrollToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.label8 = new System.Windows.Forms.Label();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.buttonRevert1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownID1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview1)).BeginInit();
             this.panel1.SuspendLayout();
@@ -111,7 +111,7 @@
             // 
             // buttonSave1
             // 
-            this.buttonSave1.Location = new System.Drawing.Point(12, 390);
+            this.buttonSave1.Location = new System.Drawing.Point(12, 385);
             this.buttonSave1.Name = "buttonSave1";
             this.buttonSave1.Size = new System.Drawing.Size(99, 23);
             this.buttonSave1.TabIndex = 4;
@@ -175,7 +175,7 @@
             // 
             // buttonSaveAll1
             // 
-            this.buttonSaveAll1.Location = new System.Drawing.Point(168, 390);
+            this.buttonSaveAll1.Location = new System.Drawing.Point(167, 385);
             this.buttonSaveAll1.Name = "buttonSaveAll1";
             this.buttonSaveAll1.Size = new System.Drawing.Size(75, 23);
             this.buttonSaveAll1.TabIndex = 11;
@@ -273,7 +273,7 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem,
+            this.menuToolStripMenuItem,
             this.shortcutsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -281,16 +281,23 @@
             this.menuStrip1.TabIndex = 19;
             this.menuStrip1.Text = "menuStrip1";
             // 
-            // fileToolStripMenuItem
+            // menuToolStripMenuItem
             // 
-            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.saveToMemoryToolStripMenuItem,
             this.saveToFileToolStripMenuItem,
             this.revertFromMemoryToolStripMenuItem,
             this.nextIDToolStripMenuItem});
-            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
-            this.fileToolStripMenuItem.Text = "File";
+            this.menuToolStripMenuItem.Name = "menuToolStripMenuItem";
+            this.menuToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
+            this.menuToolStripMenuItem.Text = "Menu";
+            // 
+            // saveToMemoryToolStripMenuItem
+            // 
+            this.saveToMemoryToolStripMenuItem.Name = "saveToMemoryToolStripMenuItem";
+            this.saveToMemoryToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.saveToMemoryToolStripMenuItem.Text = "Save To Memory";
+            this.saveToMemoryToolStripMenuItem.Click += new System.EventHandler(this.buttonSave1_Click);
             // 
             // saveToFileToolStripMenuItem
             // 
@@ -300,13 +307,64 @@
             this.saveToFileToolStripMenuItem.Text = "Save To File";
             this.saveToFileToolStripMenuItem.Click += new System.EventHandler(this.buttonSaveAll1_Click);
             // 
+            // revertFromMemoryToolStripMenuItem
+            // 
+            this.revertFromMemoryToolStripMenuItem.Name = "revertFromMemoryToolStripMenuItem";
+            this.revertFromMemoryToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
+            this.revertFromMemoryToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.revertFromMemoryToolStripMenuItem.Text = "Revert From Memory";
+            this.revertFromMemoryToolStripMenuItem.Click += new System.EventHandler(this.buttonRevert1_Click);
+            // 
             // nextIDToolStripMenuItem
             // 
             this.nextIDToolStripMenuItem.Name = "nextIDToolStripMenuItem";
             this.nextIDToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.nextIDToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.nextIDToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
             this.nextIDToolStripMenuItem.Text = "Next ID";
             this.nextIDToolStripMenuItem.Click += new System.EventHandler(this.nextIDToolStripMenuItem_Click);
+            // 
+            // shortcutsToolStripMenuItem
+            // 
+            this.shortcutsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.line1ToolStripMenuItem,
+            this.line2ToolStripMenuItem,
+            this.line3ToolStripMenuItem,
+            this.scrollToolStripMenuItem});
+            this.shortcutsToolStripMenuItem.Name = "shortcutsToolStripMenuItem";
+            this.shortcutsToolStripMenuItem.Size = new System.Drawing.Size(69, 20);
+            this.shortcutsToolStripMenuItem.Text = "Shortcuts";
+            // 
+            // line1ToolStripMenuItem
+            // 
+            this.line1ToolStripMenuItem.Name = "line1ToolStripMenuItem";
+            this.line1ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D1)));
+            this.line1ToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.line1ToolStripMenuItem.Text = "Line 1";
+            this.line1ToolStripMenuItem.Click += new System.EventHandler(this.line1ToolStripMenuItem_Click);
+            // 
+            // line2ToolStripMenuItem
+            // 
+            this.line2ToolStripMenuItem.Name = "line2ToolStripMenuItem";
+            this.line2ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D2)));
+            this.line2ToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.line2ToolStripMenuItem.Text = "Line 2";
+            this.line2ToolStripMenuItem.Click += new System.EventHandler(this.line2ToolStripMenuItem_Click);
+            // 
+            // line3ToolStripMenuItem
+            // 
+            this.line3ToolStripMenuItem.Name = "line3ToolStripMenuItem";
+            this.line3ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D3)));
+            this.line3ToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.line3ToolStripMenuItem.Text = "Line 3";
+            this.line3ToolStripMenuItem.Click += new System.EventHandler(this.line3ToolStripMenuItem_Click);
+            // 
+            // scrollToolStripMenuItem
+            // 
+            this.scrollToolStripMenuItem.Name = "scrollToolStripMenuItem";
+            this.scrollToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D4)));
+            this.scrollToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.scrollToolStripMenuItem.Text = "Scroll";
+            this.scrollToolStripMenuItem.Click += new System.EventHandler(this.scrollToolStripMenuItem_Click);
             // 
             // label8
             // 
@@ -336,71 +394,13 @@
             // 
             // buttonRevert1
             // 
-            this.buttonRevert1.Location = new System.Drawing.Point(298, 390);
+            this.buttonRevert1.Location = new System.Drawing.Point(299, 385);
             this.buttonRevert1.Name = "buttonRevert1";
             this.buttonRevert1.Size = new System.Drawing.Size(115, 23);
             this.buttonRevert1.TabIndex = 22;
             this.buttonRevert1.Text = "Revert From Memory";
             this.buttonRevert1.UseVisualStyleBackColor = true;
             this.buttonRevert1.Click += new System.EventHandler(this.buttonRevert1_Click);
-            // 
-            // revertFromMemoryToolStripMenuItem
-            // 
-            this.revertFromMemoryToolStripMenuItem.Name = "revertFromMemoryToolStripMenuItem";
-            this.revertFromMemoryToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-            this.revertFromMemoryToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
-            this.revertFromMemoryToolStripMenuItem.Text = "Revert From Memory";
-            this.revertFromMemoryToolStripMenuItem.Click += new System.EventHandler(this.buttonRevert1_Click);
-            // 
-            // saveToMemoryToolStripMenuItem
-            // 
-            this.saveToMemoryToolStripMenuItem.Name = "saveToMemoryToolStripMenuItem";
-            this.saveToMemoryToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
-            this.saveToMemoryToolStripMenuItem.Text = "Save To Memory";
-            this.saveToMemoryToolStripMenuItem.Click += new System.EventHandler(this.buttonSave1_Click);
-            // 
-            // shortcutsToolStripMenuItem
-            // 
-            this.shortcutsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.line1ToolStripMenuItem,
-            this.line2ToolStripMenuItem,
-            this.line3ToolStripMenuItem,
-            this.scrollToolStripMenuItem});
-            this.shortcutsToolStripMenuItem.Name = "shortcutsToolStripMenuItem";
-            this.shortcutsToolStripMenuItem.Size = new System.Drawing.Size(69, 20);
-            this.shortcutsToolStripMenuItem.Text = "Shortcuts";
-            // 
-            // line1ToolStripMenuItem
-            // 
-            this.line1ToolStripMenuItem.Name = "line1ToolStripMenuItem";
-            this.line1ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D1)));
-            this.line1ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.line1ToolStripMenuItem.Text = "Line 1";
-            this.line1ToolStripMenuItem.Click += new System.EventHandler(this.line1ToolStripMenuItem_Click);
-            // 
-            // line2ToolStripMenuItem
-            // 
-            this.line2ToolStripMenuItem.Name = "line2ToolStripMenuItem";
-            this.line2ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D2)));
-            this.line2ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.line2ToolStripMenuItem.Text = "Line 2";
-            this.line2ToolStripMenuItem.Click += new System.EventHandler(this.line2ToolStripMenuItem_Click);
-            // 
-            // line3ToolStripMenuItem
-            // 
-            this.line3ToolStripMenuItem.Name = "line3ToolStripMenuItem";
-            this.line3ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D3)));
-            this.line3ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.line3ToolStripMenuItem.Text = "Line 3";
-            this.line3ToolStripMenuItem.Click += new System.EventHandler(this.line3ToolStripMenuItem_Click);
-            // 
-            // scrollToolStripMenuItem
-            // 
-            this.scrollToolStripMenuItem.Name = "scrollToolStripMenuItem";
-            this.scrollToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D4)));
-            this.scrollToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.scrollToolStripMenuItem.Text = "Scroll";
-            this.scrollToolStripMenuItem.Click += new System.EventHandler(this.scrollToolStripMenuItem_Click);
             // 
             // MarvelousForm
             // 
@@ -476,7 +476,7 @@
         private System.Windows.Forms.ComboBox comboBoxLang2;
         private System.Windows.Forms.ComboBox comboBoxStyle1;
         private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem menuToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveToFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem nextIDToolStripMenuItem;
         private System.Windows.Forms.Label label8;

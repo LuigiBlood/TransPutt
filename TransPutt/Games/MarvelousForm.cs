@@ -28,7 +28,7 @@ namespace TransPutt.Games
 
         lang lang1;
         lang lang2;
-        public bool hasChanged;
+        bool hasChanged;
 
         int curIndex = -1;
 
