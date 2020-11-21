@@ -49,18 +49,23 @@
             this.label7 = new System.Windows.Forms.Label();
             this.comboBoxLang2 = new System.Windows.Forms.ComboBox();
             this.comboBoxStyle1 = new System.Windows.Forms.ComboBox();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveToFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.nextIDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownID1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview1)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview2)).BeginInit();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // comboBoxLang1
             // 
             this.comboBoxLang1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxLang1.FormattingEnabled = true;
-            this.comboBoxLang1.Location = new System.Drawing.Point(12, 29);
+            this.comboBoxLang1.Location = new System.Drawing.Point(12, 48);
             this.comboBoxLang1.Name = "comboBoxLang1";
             this.comboBoxLang1.Size = new System.Drawing.Size(262, 21);
             this.comboBoxLang1.TabIndex = 0;
@@ -69,7 +74,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 74);
+            this.label1.Location = new System.Drawing.Point(12, 93);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(38, 13);
             this.label1.TabIndex = 1;
@@ -77,7 +82,7 @@
             // 
             // numericUpDownID1
             // 
-            this.numericUpDownID1.Location = new System.Drawing.Point(362, 30);
+            this.numericUpDownID1.Location = new System.Drawing.Point(362, 49);
             this.numericUpDownID1.Name = "numericUpDownID1";
             this.numericUpDownID1.Size = new System.Drawing.Size(51, 20);
             this.numericUpDownID1.TabIndex = 2;
@@ -85,15 +90,16 @@
             // 
             // textBoxDesc1
             // 
-            this.textBoxDesc1.Location = new System.Drawing.Point(12, 90);
+            this.textBoxDesc1.Location = new System.Drawing.Point(12, 109);
             this.textBoxDesc1.Multiline = true;
             this.textBoxDesc1.Name = "textBoxDesc1";
             this.textBoxDesc1.Size = new System.Drawing.Size(401, 42);
             this.textBoxDesc1.TabIndex = 3;
+            this.textBoxDesc1.TextChanged += new System.EventHandler(this.textBoxDesc1_TextChanged);
             // 
             // buttonSave1
             // 
-            this.buttonSave1.Location = new System.Drawing.Point(12, 371);
+            this.buttonSave1.Location = new System.Drawing.Point(12, 390);
             this.buttonSave1.Name = "buttonSave1";
             this.buttonSave1.Size = new System.Drawing.Size(75, 23);
             this.buttonSave1.TabIndex = 4;
@@ -104,7 +110,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 147);
+            this.label2.Location = new System.Drawing.Point(12, 166);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(31, 13);
             this.label2.TabIndex = 5;
@@ -120,7 +126,7 @@
             // 
             // textBoxText1
             // 
-            this.textBoxText1.Location = new System.Drawing.Point(12, 163);
+            this.textBoxText1.Location = new System.Drawing.Point(12, 182);
             this.textBoxText1.Multiline = true;
             this.textBoxText1.Name = "textBoxText1";
             this.textBoxText1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -131,7 +137,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 9);
+            this.label3.Location = new System.Drawing.Point(12, 28);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(79, 13);
             this.label3.TabIndex = 8;
@@ -140,7 +146,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(305, 32);
+            this.label4.Location = new System.Drawing.Point(305, 51);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(51, 13);
             this.label4.TabIndex = 9;
@@ -150,14 +156,14 @@
             // 
             this.panel1.AutoScroll = true;
             this.panel1.Controls.Add(this.pictureBoxPreview1);
-            this.panel1.Location = new System.Drawing.Point(12, 259);
+            this.panel1.Location = new System.Drawing.Point(12, 278);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(401, 96);
             this.panel1.TabIndex = 10;
             // 
             // buttonSaveAll1
             // 
-            this.buttonSaveAll1.Location = new System.Drawing.Point(137, 371);
+            this.buttonSaveAll1.Location = new System.Drawing.Point(137, 390);
             this.buttonSaveAll1.Name = "buttonSaveAll1";
             this.buttonSaveAll1.Size = new System.Drawing.Size(75, 23);
             this.buttonSaveAll1.TabIndex = 11;
@@ -169,7 +175,7 @@
             // 
             this.panel2.AutoScroll = true;
             this.panel2.Controls.Add(this.pictureBoxPreview2);
-            this.panel2.Location = new System.Drawing.Point(455, 259);
+            this.panel2.Location = new System.Drawing.Point(455, 278);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(401, 96);
             this.panel2.TabIndex = 11;
@@ -185,7 +191,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(594, 9);
+            this.label5.Location = new System.Drawing.Point(594, 28);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(116, 13);
             this.label5.TabIndex = 17;
@@ -193,7 +199,7 @@
             // 
             // textBoxText2
             // 
-            this.textBoxText2.Location = new System.Drawing.Point(455, 163);
+            this.textBoxText2.Location = new System.Drawing.Point(455, 182);
             this.textBoxText2.Multiline = true;
             this.textBoxText2.Name = "textBoxText2";
             this.textBoxText2.ReadOnly = true;
@@ -204,7 +210,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(455, 147);
+            this.label6.Location = new System.Drawing.Point(455, 166);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(31, 13);
             this.label6.TabIndex = 15;
@@ -212,7 +218,7 @@
             // 
             // textBoxDesc2
             // 
-            this.textBoxDesc2.Location = new System.Drawing.Point(455, 90);
+            this.textBoxDesc2.Location = new System.Drawing.Point(455, 109);
             this.textBoxDesc2.Multiline = true;
             this.textBoxDesc2.Name = "textBoxDesc2";
             this.textBoxDesc2.ReadOnly = true;
@@ -222,7 +228,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(455, 74);
+            this.label7.Location = new System.Drawing.Point(455, 93);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(38, 13);
             this.label7.TabIndex = 13;
@@ -232,7 +238,7 @@
             // 
             this.comboBoxLang2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxLang2.FormattingEnabled = true;
-            this.comboBoxLang2.Location = new System.Drawing.Point(594, 29);
+            this.comboBoxLang2.Location = new System.Drawing.Point(594, 48);
             this.comboBoxLang2.Name = "comboBoxLang2";
             this.comboBoxLang2.Size = new System.Drawing.Size(262, 21);
             this.comboBoxLang2.TabIndex = 12;
@@ -246,17 +252,52 @@
             "Normal Text",
             "In-Game Text (2 Lines)",
             "Item Text (1 Line)"});
-            this.comboBoxStyle1.Location = new System.Drawing.Point(455, 29);
+            this.comboBoxStyle1.Location = new System.Drawing.Point(455, 48);
             this.comboBoxStyle1.Name = "comboBoxStyle1";
             this.comboBoxStyle1.Size = new System.Drawing.Size(121, 21);
             this.comboBoxStyle1.TabIndex = 18;
             this.comboBoxStyle1.SelectedIndexChanged += new System.EventHandler(this.comboBoxStyle1_SelectedIndexChanged);
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(870, 24);
+            this.menuStrip1.TabIndex = 19;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // fileToolStripMenuItem
+            // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.saveToFileToolStripMenuItem,
+            this.nextIDToolStripMenuItem});
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Text = "File";
+            // 
+            // saveToFileToolStripMenuItem
+            // 
+            this.saveToFileToolStripMenuItem.Name = "saveToFileToolStripMenuItem";
+            this.saveToFileToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+            this.saveToFileToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveToFileToolStripMenuItem.Text = "Save to File";
+            this.saveToFileToolStripMenuItem.Click += new System.EventHandler(this.buttonSaveAll1_Click);
+            // 
+            // nextIDToolStripMenuItem
+            // 
+            this.nextIDToolStripMenuItem.Name = "nextIDToolStripMenuItem";
+            this.nextIDToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
+            this.nextIDToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.nextIDToolStripMenuItem.Text = "Next ID";
+            this.nextIDToolStripMenuItem.Click += new System.EventHandler(this.nextIDToolStripMenuItem_Click);
+            // 
             // MarvelousForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(870, 406);
+            this.ClientSize = new System.Drawing.Size(870, 422);
             this.Controls.Add(this.comboBoxStyle1);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.textBoxText2);
@@ -276,6 +317,8 @@
             this.Controls.Add(this.numericUpDownID1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.comboBoxLang1);
+            this.Controls.Add(this.menuStrip1);
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "MarvelousForm";
             this.Text = "Marvelous Text Editor";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MarvelousForm_FormClosing);
@@ -285,6 +328,8 @@
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview2)).EndInit();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -313,5 +358,9 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.ComboBox comboBoxLang2;
         private System.Windows.Forms.ComboBox comboBoxStyle1;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveToFileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem nextIDToolStripMenuItem;
     }
 }

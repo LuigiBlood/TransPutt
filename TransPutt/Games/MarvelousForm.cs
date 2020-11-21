@@ -78,13 +78,13 @@ namespace TransPutt.Games
                 }
             }
             LoadLanguage((string)comboBoxLang1.SelectedItem, out lang1);
-
-            numericUpDownID1.Maximum = lang1.main_txt.Length;
+            numericUpDownID1.Minimum = 0;
+            numericUpDownID1.Maximum = lang1.main_txt.Length - 1;
             curIndex = (int)numericUpDownID1.Value;
             UpdateTextBox(textBoxText1, curIndex, lang1);
             UpdateNotesBox(textBoxDesc1, curIndex, lang1);
             UpdatePictureBox(pictureBoxPreview1, textBoxText1, lang1);
-            UpdateSaveAllButton(buttonSaveAll1);
+            UpdateSaveAllButton();
         }
 
         private void comboBoxLang2_SelectedIndexChanged(object sender, EventArgs e)
@@ -95,26 +95,20 @@ namespace TransPutt.Games
             UpdatePictureBox(pictureBoxPreview2, textBoxText2, lang2);
         }
 
-        private void buttonSave1_Click(object sender, EventArgs e)
-        {
-            SaveText(textBoxText1, curIndex, lang1);
-            SaveNote(textBoxDesc1, curIndex, lang1);
-            UpdateSaveAllButton(buttonSaveAll1);
-        }
-
         private void textBoxText1_TextChanged(object sender, EventArgs e)
         {
             UpdatePictureBox(pictureBoxPreview1, textBoxText1, lang1);
-            UpdateSaveAllButton(buttonSaveAll1);
+            UpdateSaveAllButton();
         }
 
         private void numericUpDownID1_ValueChanged(object sender, EventArgs e)
         {
+            numericUpDownID1.Value = Math.Min(numericUpDownID1.Value, numericUpDownID1.Maximum);
             if (curIndex != -1)
             {
                 if (isTextDifferent(textBoxText1, curIndex, lang1) || (lang1.notes[curIndex] != textBoxDesc1.Text.Replace("\r\n", "\\")))
                 {
-                    if (MessageBox.Show("Do you want to save the text & notes?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    //if (MessageBox.Show("Do you want to save the text & notes?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
                         SaveText(textBoxText1, curIndex, lang1);
                         SaveNote(textBoxDesc1, curIndex, lang1);
@@ -124,11 +118,18 @@ namespace TransPutt.Games
             curIndex = (int)numericUpDownID1.Value;
             UpdateTextBox(textBoxText1, curIndex, lang1);
             UpdateNotesBox(textBoxDesc1, curIndex, lang1);
-            UpdateSaveAllButton(buttonSaveAll1);
+            UpdateSaveAllButton();
 
             UpdateTextBox(textBoxText2, curIndex, lang2);
             UpdateNotesBox(textBoxDesc2, curIndex, lang2);
             UpdatePictureBox(pictureBoxPreview2, textBoxText2, lang2);
+        }
+
+        private void buttonSave1_Click(object sender, EventArgs e)
+        {
+            SaveText(textBoxText1, curIndex, lang1);
+            SaveNote(textBoxDesc1, curIndex, lang1);
+            UpdateSaveAllButton();
         }
 
         private void buttonSaveAll1_Click(object sender, EventArgs e)
@@ -136,7 +137,7 @@ namespace TransPutt.Games
             SaveText(textBoxText1, curIndex, lang1);
             SaveNote(textBoxDesc1, curIndex, lang1);
             SaveMainScript(lang1);
-            UpdateSaveAllButton(buttonSaveAll1);
+            UpdateSaveAllButton();
         }
 
         private void MarvelousForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -161,6 +162,23 @@ namespace TransPutt.Games
         {
             UpdatePictureBox(pictureBoxPreview1, textBoxText1, lang1);
             UpdatePictureBox(pictureBoxPreview2, textBoxText2, lang2);
+        }
+
+        private void nextIDToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (numericUpDownID1.Value == numericUpDownID1.Maximum)
+            {
+                numericUpDownID1.Value = numericUpDownID1.Minimum;
+            }
+            else
+            {
+                numericUpDownID1.Value++;
+            }
+        }
+
+        private void textBoxDesc1_TextChanged(object sender, EventArgs e)
+        {
+            UpdateSaveAllButton();
         }
 
 
@@ -314,9 +332,10 @@ namespace TransPutt.Games
             pictureBox.Height = pictureBox.Image.Height;
         }
 
-        private void UpdateSaveAllButton(Button button)
+        private void UpdateSaveAllButton()
         {
-            button.Enabled = hasChanged || isTextDifferent(textBoxText1, curIndex, lang1);
+            buttonSaveAll1.Enabled = hasChanged || isTextDifferent(textBoxText1, curIndex, lang1) || (lang1.notes[curIndex] != textBoxDesc1.Text.Replace("\r\n", "\\"));
+            saveToFileToolStripMenuItem.Enabled = buttonSaveAll1.Enabled;
         }
 
         private Bitmap RenderText(string text, lang curlang, int style)
