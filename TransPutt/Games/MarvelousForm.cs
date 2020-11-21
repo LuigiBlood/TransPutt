@@ -194,6 +194,26 @@ namespace TransPutt.Games
             toolStripStatusLabel1.Text = "Reverted ID " + curIndex;
         }
 
+        private void line1ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            textBoxText1.Paste(GetCommandString("F7", lang1));
+        }
+
+        private void line2ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            textBoxText1.Paste(GetCommandString("F8", lang1));
+        }
+
+        private void line3ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            textBoxText1.Paste(GetCommandString("F9", lang1));
+        }
+
+        private void scrollToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            textBoxText1.Paste(GetCommandString("F6", lang1));
+        }
+
 
 
         //--Text Functions
@@ -711,6 +731,16 @@ namespace TransPutt.Games
                 g.DrawImage(GraphicsRender.Nintendo.TileFrom2BPP(dat[3], pal), 8, 8);
             }
             return gfx;
+        }
+
+        private string GetCommandString(string key, lang inlang)
+        {
+            for (int i = 0; i < inlang.table.Count; i++)
+            {
+                if (inlang.table[i].Item1 == key)
+                    return inlang.table[i].Item2;
+            }
+            return "";
         }
     }
 }
