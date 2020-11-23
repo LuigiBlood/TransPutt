@@ -64,6 +64,7 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.buttonRevert1 = new System.Windows.Forms.Button();
+            this.previousIDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownID1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview1)).BeginInit();
             this.panel1.SuspendLayout();
@@ -287,7 +288,8 @@
             this.saveToMemoryToolStripMenuItem,
             this.saveToFileToolStripMenuItem,
             this.revertFromMemoryToolStripMenuItem,
-            this.nextIDToolStripMenuItem});
+            this.nextIDToolStripMenuItem,
+            this.previousIDToolStripMenuItem});
             this.menuToolStripMenuItem.Name = "menuToolStripMenuItem";
             this.menuToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
             this.menuToolStripMenuItem.Text = "Menu";
@@ -402,6 +404,14 @@
             this.buttonRevert1.UseVisualStyleBackColor = true;
             this.buttonRevert1.Click += new System.EventHandler(this.buttonRevert1_Click);
             // 
+            // previousIDToolStripMenuItem
+            // 
+            this.previousIDToolStripMenuItem.Name = "previousIDToolStripMenuItem";
+            this.previousIDToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
+            this.previousIDToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.previousIDToolStripMenuItem.Text = "Previous ID";
+            this.previousIDToolStripMenuItem.Click += new System.EventHandler(this.previousIDToolStripMenuItem_Click);
+            // 
             // MarvelousForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -490,5 +500,6 @@
         private System.Windows.Forms.ToolStripMenuItem line2ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem line3ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem scrollToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem previousIDToolStripMenuItem;
     }
 }

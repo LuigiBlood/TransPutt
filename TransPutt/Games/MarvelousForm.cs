@@ -176,6 +176,18 @@ namespace TransPutt.Games
             }
         }
 
+        private void previousIDToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (numericUpDownID1.Value == numericUpDownID1.Minimum)
+            {
+                numericUpDownID1.Value = numericUpDownID1.Maximum;
+            }
+            else
+            {
+                numericUpDownID1.Value--;
+            }
+        }
+
         private void textBoxDesc1_TextChanged(object sender, EventArgs e)
         {
             UpdateSaveAllButton();
