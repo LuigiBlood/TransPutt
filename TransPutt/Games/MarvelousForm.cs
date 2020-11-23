@@ -465,10 +465,35 @@ namespace TransPutt.Games
                         i++;
                         if (encoded[i] == 0x6D)
                         {
+                            //Icon
                             i++;
-                            char_gfx = RenderIcon(encoded[i], curlang, style);
-                            if ((h_pixel % 16) != 0)
-                                h_pixel += 16 - (h_pixel % 16);
+                            if (encoded[i] == 0x18)
+                            {
+                                //Item Select
+                                char_gfx = RenderItemSelect(curlang);
+                                using (Graphics g = Graphics.FromImage(output))
+                                {
+                                    g.DrawImageUnscaled(char_gfx, 0, 32);
+                                }
+                                continue;
+                            }
+                            else if (encoded[i] == 0x1C)
+                            {
+                                //Leader Select
+                                char_gfx = RenderLeaderSelect(curlang);
+                                using (Graphics g = Graphics.FromImage(output))
+                                {
+                                    g.DrawImageUnscaled(char_gfx, 8 * 28, 0);
+                                }
+                                continue;
+                            }
+                            else
+                            {
+                                //Other Icons
+                                char_gfx = RenderIcon(encoded[i], curlang, style);
+                                if ((h_pixel % 16) != 0)
+                                    h_pixel += 16 - (h_pixel % 16);
+                            }
                         }
                         else if (encoded[i] == 0x68)
                         {
@@ -497,27 +522,27 @@ namespace TransPutt.Games
                         }
                         else if (encoded[i] == 0x6F)
                         {
-                            //??? Robot Path?
+                            //Robot Path
                             continue;
                         }
                         else if (encoded[i] == 0x70)
                         {
-                            //??? Robot Rotation?
+                            //Robot Rotation
                             continue;
                         }
                         else if (encoded[i] == 0x71)
                         {
-                            //??? Item Select?
+                            //Item Select Manager
                             continue;
                         }
                         else if (encoded[i] == 0x78)
                         {
-                            //???
+                            //??? Button Use
                             continue;
                         }
                         else if (encoded[i] == 0x79)
                         {
-                            //???
+                            //??? Prep Button use?
                             continue;
                         }
                         else if (encoded[i] == 0x7B)
@@ -532,7 +557,7 @@ namespace TransPutt.Games
                         }
                         else if (encoded[i] == 0x7E)
                         {
-                            //???
+                            //Button Use (Mash or Gameplay)
                             continue;
                         }
                         else
@@ -555,6 +580,73 @@ namespace TransPutt.Games
             }
 
             return output;
+        }
+
+        private Bitmap RenderItemSelect(lang curlang)
+        {
+            Color[] pal = { Color.Black, Color.Black, Color.White, Color.Red };
+            Bitmap gfx = new Bitmap(16 * 4, 16 * 2 * 2);
+
+            //Render
+            using (Graphics g = Graphics.FromImage(gfx))
+            {
+                g.ScaleTransform(1f, 2f);
+                g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
+                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+                g.Clear(Color.Transparent);
+
+                for (int y = 0; y < 2; y++)
+                    for (int x = 0; x < 4; x++)
+                    {
+                        g.DrawImage(GraphicsRender.Nintendo.TileFrom2BPP(Program.Subarray(curlang.icons_chr, 0x4040 + (0x10 * x) + (0x100 * y), 0x10), pal), 8 * x, 8 * y);
+                        g.DrawImage(GraphicsRender.Nintendo.TileFrom2BPP(Program.Subarray(curlang.icons_chr, 0x4060 + (0x10 * x) + (0x100 * y), 0x10), pal), 8 * (x + 4), 8 * y);
+                        g.DrawImage(GraphicsRender.Nintendo.TileFrom2BPP(Program.Subarray(curlang.icons_chr, 0x40A0 + (0x10 * x) + (0x100 * y), 0x10), pal), 8 * x, 8 * (y + 2));
+                        g.DrawImage(GraphicsRender.Nintendo.TileFrom2BPP(Program.Subarray(curlang.icons_chr, 0x40C0 + (0x10 * x) + (0x100 * y), 0x10), pal), 8 * (x + 4), 8 * (y + 2));
+                    }
+            }
+
+            return gfx;
+        }
+
+        private Bitmap RenderLeaderSelect(lang curlang)
+        {
+            Color[] palhud = { Color.Black, Color.Black, Color.White, Color.Green };
+            Color[] pal1 = { Color.Black, Color.Beige, Color.White, Color.Maroon };
+            Color[] pal3 = { Color.Black, Color.Black, Color.White, Color.Blue };
+            Color[] palskin = { Color.Black, Color.Black, Color.White, Color.Bisque };
+            Bitmap gfx = new Bitmap(16 * 8, 16 * 2 * 2);
+
+            //Render
+            using (Graphics g = Graphics.FromImage(gfx))
+            {
+                g.ScaleTransform(1f, 2f);
+                g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
+                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+                g.Clear(Color.Transparent);
+
+                for (int y = 0; y < 4; y++)
+                    for (int x = 0; x < 2; x++)
+                    {
+                        g.DrawImage(GraphicsRender.Nintendo.TileFrom2BPP(Program.Subarray(curlang.icons_chr, 0x5000 + (0x10 * x) + (0x100 * y), 0x10), palhud), 8 * x, 8 * y);
+                        g.DrawImage(GraphicsRender.Nintendo.TileFrom2BPP(Program.Subarray(curlang.icons_chr, 0x5020 + (0x10 * x) + (0x100 * y), 0x10), palhud), 8 * (x + 14), 8 * y);
+                    }
+
+                for (int y = 0; y < 2; y++)
+                    for (int x = 0; x < 4; x++)
+                    {
+                        g.DrawImage(GraphicsRender.Nintendo.TileFrom2BPP(Program.Subarray(curlang.icons_chr, 0x5040 + (0x10 * x) + (0x100 * y), 0x10), pal1), 8 * (x + 2), 8 * y);
+                        g.DrawImage(GraphicsRender.Nintendo.TileFrom2BPP(Program.Subarray(curlang.icons_chr, 0x5080 + (0x10 * x) + (0x100 * y), 0x10), pal1), 8 * (x + 6), 8 * y);
+                        g.DrawImage(GraphicsRender.Nintendo.TileFrom2BPP(Program.Subarray(curlang.icons_chr, 0x50C0 + (0x10 * x) + (0x100 * y), 0x10), pal3), 8 * (x + 10), 8 * y);
+
+                        g.DrawImage(GraphicsRender.Nintendo.TileFrom2BPP(Program.Subarray(curlang.icons_chr, 0x5240 + (0x10 * x) + (0x100 * y), 0x10), palskin), 8 * (x + 2), 8 * (y + 2));
+                        g.DrawImage(GraphicsRender.Nintendo.TileFrom2BPP(Program.Subarray(curlang.icons_chr, 0x5280 + (0x10 * x) + (0x100 * y), 0x10), palskin), 8 * (x + 6), 8 * (y + 2));
+                        g.DrawImage(GraphicsRender.Nintendo.TileFrom2BPP(Program.Subarray(curlang.icons_chr, 0x52C0 + (0x10 * x) + (0x100 * y), 0x10), palskin), 8 * (x + 10), 8 * (y + 2));
+                    }
+            }
+
+            return gfx;
         }
 
         private Bitmap RenderIcon(int id, lang curlang, int style)
