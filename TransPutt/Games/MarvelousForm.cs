@@ -467,13 +467,78 @@ namespace TransPutt.Games
                         {
                             i++;
                             char_gfx = RenderIcon(encoded[i], curlang, style);
+                            if ((h_pixel % 16) != 0)
+                                h_pixel += 16 - (h_pixel % 16);
+                        }
+                        else if (encoded[i] == 0x68)
+                        {
+                            //2 Choices
+                            continue;
+                        }
+                        else if (encoded[i] == 0x6A)
+                        {
+                            //???
+                            continue;
+                        }
+                        else if (encoded[i] == 0x6B)
+                        {
+                            //Number of something
+                            continue;
+                        }
+                        else if (encoded[i] == 0x6C)
+                        {
+                            //Amount of something
+                            continue;
+                        }
+                        else if (encoded[i] == 0x6E)
+                        {
+                            //3 Choices
+                            continue;
+                        }
+                        else if (encoded[i] == 0x6F)
+                        {
+                            //??? Robot Path?
+                            continue;
+                        }
+                        else if (encoded[i] == 0x70)
+                        {
+                            //??? Robot Rotation?
+                            continue;
+                        }
+                        else if (encoded[i] == 0x71)
+                        {
+                            //??? Item Select?
+                            continue;
+                        }
+                        else if (encoded[i] == 0x78)
+                        {
+                            //???
+                            continue;
+                        }
+                        else if (encoded[i] == 0x79)
+                        {
+                            //???
+                            continue;
+                        }
+                        else if (encoded[i] == 0x7B)
+                        {
+                            //??? Directions?
+                            continue;
+                        }
+                        else if (encoded[i] == 0x7C)
+                        {
+                            //???
+                            continue;
+                        }
+                        else if (encoded[i] == 0x7E)
+                        {
+                            //???
+                            continue;
                         }
                         else
                         {
-                            char_gfx = new Bitmap(16, 32);
+                            continue;
                         }
-                        if ((h_pixel % 16) != 0)
-                            h_pixel += 16 - (h_pixel % 16);
 
                     }
                     else if (encoded[i] == 0xFF)
