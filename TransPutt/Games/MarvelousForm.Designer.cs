@@ -55,6 +55,7 @@
             this.saveToFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.revertFromMemoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nextIDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.previousIDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.shortcutsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.line1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.line2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -64,7 +65,10 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.buttonRevert1 = new System.Windows.Forms.Button();
-            this.previousIDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.buttonSelectText = new System.Windows.Forms.Button();
+            this.buttonSelectNotes = new System.Windows.Forms.Button();
+            this.buttonSelectNotes2 = new System.Windows.Forms.Button();
+            this.buttonSelectWindow2 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownID1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview1)).BeginInit();
             this.panel1.SuspendLayout();
@@ -87,7 +91,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 90);
+            this.label1.Location = new System.Drawing.Point(12, 118);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(38, 13);
             this.label1.TabIndex = 1;
@@ -95,7 +99,7 @@
             // 
             // numericUpDownID1
             // 
-            this.numericUpDownID1.Location = new System.Drawing.Point(362, 57);
+            this.numericUpDownID1.Location = new System.Drawing.Point(363, 56);
             this.numericUpDownID1.Name = "numericUpDownID1";
             this.numericUpDownID1.Size = new System.Drawing.Size(51, 20);
             this.numericUpDownID1.TabIndex = 2;
@@ -103,7 +107,7 @@
             // 
             // textBoxDesc1
             // 
-            this.textBoxDesc1.Location = new System.Drawing.Point(12, 109);
+            this.textBoxDesc1.Location = new System.Drawing.Point(12, 137);
             this.textBoxDesc1.Multiline = true;
             this.textBoxDesc1.Name = "textBoxDesc1";
             this.textBoxDesc1.Size = new System.Drawing.Size(401, 42);
@@ -112,7 +116,7 @@
             // 
             // buttonSave1
             // 
-            this.buttonSave1.Location = new System.Drawing.Point(12, 385);
+            this.buttonSave1.Location = new System.Drawing.Point(12, 413);
             this.buttonSave1.Name = "buttonSave1";
             this.buttonSave1.Size = new System.Drawing.Size(99, 23);
             this.buttonSave1.TabIndex = 4;
@@ -123,7 +127,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 163);
+            this.label2.Location = new System.Drawing.Point(12, 191);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(31, 13);
             this.label2.TabIndex = 5;
@@ -139,7 +143,7 @@
             // 
             // textBoxText1
             // 
-            this.textBoxText1.Location = new System.Drawing.Point(12, 182);
+            this.textBoxText1.Location = new System.Drawing.Point(12, 210);
             this.textBoxText1.Multiline = true;
             this.textBoxText1.Name = "textBoxText1";
             this.textBoxText1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -159,7 +163,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(305, 59);
+            this.label4.Location = new System.Drawing.Point(306, 58);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(51, 13);
             this.label4.TabIndex = 9;
@@ -169,14 +173,14 @@
             // 
             this.panel1.AutoScroll = true;
             this.panel1.Controls.Add(this.pictureBoxPreview1);
-            this.panel1.Location = new System.Drawing.Point(12, 278);
+            this.panel1.Location = new System.Drawing.Point(12, 306);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(401, 96);
             this.panel1.TabIndex = 10;
             // 
             // buttonSaveAll1
             // 
-            this.buttonSaveAll1.Location = new System.Drawing.Point(167, 385);
+            this.buttonSaveAll1.Location = new System.Drawing.Point(167, 413);
             this.buttonSaveAll1.Name = "buttonSaveAll1";
             this.buttonSaveAll1.Size = new System.Drawing.Size(75, 23);
             this.buttonSaveAll1.TabIndex = 11;
@@ -188,7 +192,7 @@
             // 
             this.panel2.AutoScroll = true;
             this.panel2.Controls.Add(this.pictureBoxPreview2);
-            this.panel2.Location = new System.Drawing.Point(455, 278);
+            this.panel2.Location = new System.Drawing.Point(455, 306);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(401, 96);
             this.panel2.TabIndex = 11;
@@ -204,7 +208,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(594, 36);
+            this.label5.Location = new System.Drawing.Point(455, 36);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(116, 13);
             this.label5.TabIndex = 17;
@@ -212,7 +216,7 @@
             // 
             // textBoxText2
             // 
-            this.textBoxText2.Location = new System.Drawing.Point(455, 182);
+            this.textBoxText2.Location = new System.Drawing.Point(455, 210);
             this.textBoxText2.Multiline = true;
             this.textBoxText2.Name = "textBoxText2";
             this.textBoxText2.ReadOnly = true;
@@ -223,7 +227,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(455, 163);
+            this.label6.Location = new System.Drawing.Point(455, 191);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(31, 13);
             this.label6.TabIndex = 15;
@@ -231,7 +235,7 @@
             // 
             // textBoxDesc2
             // 
-            this.textBoxDesc2.Location = new System.Drawing.Point(455, 109);
+            this.textBoxDesc2.Location = new System.Drawing.Point(455, 137);
             this.textBoxDesc2.Multiline = true;
             this.textBoxDesc2.Name = "textBoxDesc2";
             this.textBoxDesc2.ReadOnly = true;
@@ -241,7 +245,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(455, 90);
+            this.label7.Location = new System.Drawing.Point(455, 118);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(38, 13);
             this.label7.TabIndex = 13;
@@ -251,7 +255,7 @@
             // 
             this.comboBoxLang2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxLang2.FormattingEnabled = true;
-            this.comboBoxLang2.Location = new System.Drawing.Point(594, 56);
+            this.comboBoxLang2.Location = new System.Drawing.Point(455, 56);
             this.comboBoxLang2.Name = "comboBoxLang2";
             this.comboBoxLang2.Size = new System.Drawing.Size(262, 21);
             this.comboBoxLang2.TabIndex = 12;
@@ -265,7 +269,7 @@
             "Normal Text",
             "In-Game Text (2 Lines)",
             "Item Text (1 Line)"});
-            this.comboBoxStyle1.Location = new System.Drawing.Point(455, 57);
+            this.comboBoxStyle1.Location = new System.Drawing.Point(293, 89);
             this.comboBoxStyle1.Name = "comboBoxStyle1";
             this.comboBoxStyle1.Size = new System.Drawing.Size(121, 21);
             this.comboBoxStyle1.TabIndex = 18;
@@ -325,6 +329,14 @@
             this.nextIDToolStripMenuItem.Text = "Next ID";
             this.nextIDToolStripMenuItem.Click += new System.EventHandler(this.nextIDToolStripMenuItem_Click);
             // 
+            // previousIDToolStripMenuItem
+            // 
+            this.previousIDToolStripMenuItem.Name = "previousIDToolStripMenuItem";
+            this.previousIDToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
+            this.previousIDToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.previousIDToolStripMenuItem.Text = "Previous ID";
+            this.previousIDToolStripMenuItem.Click += new System.EventHandler(this.previousIDToolStripMenuItem_Click);
+            // 
             // shortcutsToolStripMenuItem
             // 
             this.shortcutsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -340,7 +352,7 @@
             // 
             this.line1ToolStripMenuItem.Name = "line1ToolStripMenuItem";
             this.line1ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D1)));
-            this.line1ToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.line1ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.line1ToolStripMenuItem.Text = "Line 1";
             this.line1ToolStripMenuItem.Click += new System.EventHandler(this.line1ToolStripMenuItem_Click);
             // 
@@ -348,7 +360,7 @@
             // 
             this.line2ToolStripMenuItem.Name = "line2ToolStripMenuItem";
             this.line2ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D2)));
-            this.line2ToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.line2ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.line2ToolStripMenuItem.Text = "Line 2";
             this.line2ToolStripMenuItem.Click += new System.EventHandler(this.line2ToolStripMenuItem_Click);
             // 
@@ -356,7 +368,7 @@
             // 
             this.line3ToolStripMenuItem.Name = "line3ToolStripMenuItem";
             this.line3ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D3)));
-            this.line3ToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.line3ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.line3ToolStripMenuItem.Text = "Line 3";
             this.line3ToolStripMenuItem.Click += new System.EventHandler(this.line3ToolStripMenuItem_Click);
             // 
@@ -364,14 +376,14 @@
             // 
             this.scrollToolStripMenuItem.Name = "scrollToolStripMenuItem";
             this.scrollToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D4)));
-            this.scrollToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.scrollToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.scrollToolStripMenuItem.Text = "Scroll";
             this.scrollToolStripMenuItem.Click += new System.EventHandler(this.scrollToolStripMenuItem_Click);
             // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(455, 36);
+            this.label8.Location = new System.Drawing.Point(258, 93);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(33, 13);
             this.label8.TabIndex = 20;
@@ -381,7 +393,7 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 419);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 446);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(864, 22);
             this.statusStrip1.SizingGrip = false;
@@ -396,7 +408,7 @@
             // 
             // buttonRevert1
             // 
-            this.buttonRevert1.Location = new System.Drawing.Point(299, 385);
+            this.buttonRevert1.Location = new System.Drawing.Point(299, 413);
             this.buttonRevert1.Name = "buttonRevert1";
             this.buttonRevert1.Size = new System.Drawing.Size(115, 23);
             this.buttonRevert1.TabIndex = 22;
@@ -404,19 +416,55 @@
             this.buttonRevert1.UseVisualStyleBackColor = true;
             this.buttonRevert1.Click += new System.EventHandler(this.buttonRevert1_Click);
             // 
-            // previousIDToolStripMenuItem
+            // buttonSelectText
             // 
-            this.previousIDToolStripMenuItem.Name = "previousIDToolStripMenuItem";
-            this.previousIDToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
-            this.previousIDToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
-            this.previousIDToolStripMenuItem.Text = "Previous ID";
-            this.previousIDToolStripMenuItem.Click += new System.EventHandler(this.previousIDToolStripMenuItem_Click);
+            this.buttonSelectText.Location = new System.Drawing.Point(12, 88);
+            this.buttonSelectText.Name = "buttonSelectText";
+            this.buttonSelectText.Size = new System.Drawing.Size(121, 23);
+            this.buttonSelectText.TabIndex = 23;
+            this.buttonSelectText.Text = "Select ID... (By Text)";
+            this.buttonSelectText.UseVisualStyleBackColor = true;
+            this.buttonSelectText.Click += new System.EventHandler(this.buttonSelectText_Click);
+            // 
+            // buttonSelectNotes
+            // 
+            this.buttonSelectNotes.Location = new System.Drawing.Point(137, 88);
+            this.buttonSelectNotes.Name = "buttonSelectNotes";
+            this.buttonSelectNotes.Size = new System.Drawing.Size(64, 23);
+            this.buttonSelectNotes.TabIndex = 24;
+            this.buttonSelectNotes.Text = "(By Notes)";
+            this.buttonSelectNotes.UseVisualStyleBackColor = true;
+            this.buttonSelectNotes.Click += new System.EventHandler(this.buttonSelectNotes_Click);
+            // 
+            // buttonSelectNotes2
+            // 
+            this.buttonSelectNotes2.Location = new System.Drawing.Point(580, 88);
+            this.buttonSelectNotes2.Name = "buttonSelectNotes2";
+            this.buttonSelectNotes2.Size = new System.Drawing.Size(64, 23);
+            this.buttonSelectNotes2.TabIndex = 26;
+            this.buttonSelectNotes2.Text = "(By Notes)";
+            this.buttonSelectNotes2.UseVisualStyleBackColor = true;
+            this.buttonSelectNotes2.Click += new System.EventHandler(this.buttonSelectNotes2_Click);
+            // 
+            // buttonSelectWindow2
+            // 
+            this.buttonSelectWindow2.Location = new System.Drawing.Point(455, 88);
+            this.buttonSelectWindow2.Name = "buttonSelectWindow2";
+            this.buttonSelectWindow2.Size = new System.Drawing.Size(121, 23);
+            this.buttonSelectWindow2.TabIndex = 25;
+            this.buttonSelectWindow2.Text = "Select ID... (By Text)";
+            this.buttonSelectWindow2.UseVisualStyleBackColor = true;
+            this.buttonSelectWindow2.Click += new System.EventHandler(this.buttonSelectWindow2_Click);
             // 
             // MarvelousForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(864, 441);
+            this.ClientSize = new System.Drawing.Size(864, 468);
+            this.Controls.Add(this.buttonSelectNotes2);
+            this.Controls.Add(this.buttonSelectWindow2);
+            this.Controls.Add(this.buttonSelectNotes);
+            this.Controls.Add(this.buttonSelectText);
             this.Controls.Add(this.buttonRevert1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.label8);
@@ -501,5 +549,9 @@
         private System.Windows.Forms.ToolStripMenuItem line3ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem scrollToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem previousIDToolStripMenuItem;
+        private System.Windows.Forms.Button buttonSelectText;
+        private System.Windows.Forms.Button buttonSelectNotes;
+        private System.Windows.Forms.Button buttonSelectNotes2;
+        private System.Windows.Forms.Button buttonSelectWindow2;
     }
 }

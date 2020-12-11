@@ -226,6 +226,34 @@ namespace TransPutt.Games
             textBoxText1.Paste(GetCommandString("F6", lang1));
         }
 
+        private void buttonSelectText_Click(object sender, EventArgs e)
+        {
+            int temp = GetSelectID(lang1, false);
+            if (temp >= 0)
+                numericUpDownID1.Value = temp;
+        }
+
+        private void buttonSelectNotes_Click(object sender, EventArgs e)
+        {
+            int temp = GetSelectID(lang1, true);
+            if (temp >= 0)
+                numericUpDownID1.Value = temp;
+        }
+
+        private void buttonSelectWindow2_Click(object sender, EventArgs e)
+        {
+            int temp = GetSelectID(lang2, false);
+            if (temp >= 0)
+                numericUpDownID1.Value = temp;
+        }
+
+        private void buttonSelectNotes2_Click(object sender, EventArgs e)
+        {
+            int temp = GetSelectID(lang2, true);
+            if (temp >= 0)
+                numericUpDownID1.Value = temp;
+        }
+
 
 
         //--Text Functions
@@ -910,6 +938,51 @@ namespace TransPutt.Games
                     return inlang.table[i].Item2;
             }
             return "";
+        }
+
+        private int GetSelectID(lang inlang, bool useNotes = false)
+        {
+            Form idForm = new Form();
+            idForm.Size = new Size(300, 300);
+            idForm.Text = "Select ID...";
+            idForm.FormBorderStyle = FormBorderStyle.FixedDialog;
+
+            ListBox listBox = new ListBox();
+            listBox.Location = new Point(0, 0);
+            listBox.Size = new Size(284, 224);
+
+            if (!useNotes)
+            {
+                for (int i = 0; i < inlang.main_txt.Length; i++)
+                    listBox.Items.Add(i + ": " + inlang.main_txt[i].Substring(0, Math.Min(50, inlang.main_txt[i].Length)));
+            }
+            else
+            {
+                for (int i = 0; i < inlang.notes.Length; i++)
+                    listBox.Items.Add(i + ": " + inlang.notes[i].Substring(0, Math.Min(50, inlang.notes[i].Length)));
+            }
+
+            Button selectButton = new Button();
+            selectButton.Text = "Select";
+            selectButton.Location = new Point(10, 227);
+            selectButton.Size = new Size(75, 23);
+            selectButton.DialogResult = DialogResult.OK;
+
+            Button cancelButton = new Button();
+            cancelButton.Text = "Cancel";
+            cancelButton.Location = new Point(200, 227);
+            cancelButton.Size = new Size(75, 23);
+
+            idForm.Controls.Add(listBox);
+            idForm.Controls.Add(selectButton);
+            idForm.Controls.Add(cancelButton);
+            idForm.AcceptButton = selectButton;
+            idForm.CancelButton = cancelButton;
+
+            if (idForm.ShowDialog() == DialogResult.OK)
+                return listBox.SelectedIndex;
+            else
+                return -1;
         }
     }
 }
