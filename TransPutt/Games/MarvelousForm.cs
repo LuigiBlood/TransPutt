@@ -104,7 +104,8 @@ namespace TransPutt.Games
         private void numericUpDownID1_ValueChanged(object sender, EventArgs e)
         {
             numericUpDownID1.Value = Math.Min(numericUpDownID1.Value, numericUpDownID1.Maximum);
-            if (curIndex != -1)
+
+            if (curIndex != -1 && curIndex < lang1.main_txt.Length)
             {
                 if (isTextDifferent(textBoxText1, curIndex, lang1) || (lang1.notes[curIndex] != textBoxDesc1.Text.Replace("\r\n", "\\")))
                 {
@@ -337,6 +338,9 @@ namespace TransPutt.Games
 
         private bool isTextDifferent(TextBox textBox, int id, lang inlang)
         {
+            if (id >= inlang.main_txt.Length)
+                return false;
+
             byte[] encoded_orig;
             byte[] encoded_new;
             string errorout = "";
@@ -348,6 +352,9 @@ namespace TransPutt.Games
 
         private void SaveNote(TextBox textBox, int id, lang inlang)
         {
+            if (id >= inlang.main_txt.Length)
+                return;
+
             if (inlang.notes[id] == textBox.Text.Replace("\r\n", "\\"))
                 return;
 
@@ -397,12 +404,18 @@ namespace TransPutt.Games
 
         private void UpdateNotesBox(TextBox textBox, int id, lang inlang)
         {
-            textBox.Text = inlang.notes[id].Replace("\\", "\r\n");
+            if (id < inlang.main_txt.Length)
+                textBox.Text = inlang.notes[id].Replace("\\", "\r\n");
+            else
+                textBox.Text = "";
         }
 
         private void UpdateTextBox(TextBox textBox, int id, lang inlang)
         {
-            textBox.Text = inlang.main_txt[id].Replace("\n", "\r\n");
+            if (id < inlang.main_txt.Length)
+                textBox.Text = inlang.main_txt[id].Replace("\n", "\r\n");
+            else
+                textBox.Text = "";
         }
 
         private void UpdatePictureBox(PictureBox pictureBox, TextBox textBox, lang inlang)
