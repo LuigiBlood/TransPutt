@@ -840,7 +840,7 @@ namespace TransPutt.Games
                 }
                 else if (id == 0x1A || id == 0x34 || id == 0x56)
                 {
-                    gfx = new Bitmap(16 * 5, 32);
+                    g.FillRectangle(Brushes.Gray, 0, 0, 16 * 5, 32);
                 }
                 else
                 {
