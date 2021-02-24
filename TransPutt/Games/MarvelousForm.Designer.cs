@@ -69,6 +69,7 @@
             this.buttonSelectNotes = new System.Windows.Forms.Button();
             this.buttonSelectNotes2 = new System.Windows.Forms.Button();
             this.buttonSelectWindow2 = new System.Windows.Forms.Button();
+            this.buttonReload2 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownID1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview1)).BeginInit();
             this.panel1.SuspendLayout();
@@ -352,7 +353,7 @@
             // 
             this.line1ToolStripMenuItem.Name = "line1ToolStripMenuItem";
             this.line1ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D1)));
-            this.line1ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.line1ToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.line1ToolStripMenuItem.Text = "Line 1";
             this.line1ToolStripMenuItem.Click += new System.EventHandler(this.line1ToolStripMenuItem_Click);
             // 
@@ -360,7 +361,7 @@
             // 
             this.line2ToolStripMenuItem.Name = "line2ToolStripMenuItem";
             this.line2ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D2)));
-            this.line2ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.line2ToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.line2ToolStripMenuItem.Text = "Line 2";
             this.line2ToolStripMenuItem.Click += new System.EventHandler(this.line2ToolStripMenuItem_Click);
             // 
@@ -368,7 +369,7 @@
             // 
             this.line3ToolStripMenuItem.Name = "line3ToolStripMenuItem";
             this.line3ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D3)));
-            this.line3ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.line3ToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.line3ToolStripMenuItem.Text = "Line 3";
             this.line3ToolStripMenuItem.Click += new System.EventHandler(this.line3ToolStripMenuItem_Click);
             // 
@@ -376,7 +377,7 @@
             // 
             this.scrollToolStripMenuItem.Name = "scrollToolStripMenuItem";
             this.scrollToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D4)));
-            this.scrollToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.scrollToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.scrollToolStripMenuItem.Text = "Scroll";
             this.scrollToolStripMenuItem.Click += new System.EventHandler(this.scrollToolStripMenuItem_Click);
             // 
@@ -456,11 +457,22 @@
             this.buttonSelectWindow2.UseVisualStyleBackColor = true;
             this.buttonSelectWindow2.Click += new System.EventHandler(this.buttonSelectWindow2_Click);
             // 
+            // buttonReload2
+            // 
+            this.buttonReload2.Location = new System.Drawing.Point(739, 55);
+            this.buttonReload2.Name = "buttonReload2";
+            this.buttonReload2.Size = new System.Drawing.Size(100, 23);
+            this.buttonReload2.TabIndex = 27;
+            this.buttonReload2.Text = "Reload";
+            this.buttonReload2.UseVisualStyleBackColor = true;
+            this.buttonReload2.Click += new System.EventHandler(this.comboBoxLang2_SelectedIndexChanged);
+            // 
             // MarvelousForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(864, 468);
+            this.Controls.Add(this.buttonReload2);
             this.Controls.Add(this.buttonSelectNotes2);
             this.Controls.Add(this.buttonSelectWindow2);
             this.Controls.Add(this.buttonSelectNotes);
@@ -553,5 +565,6 @@
         private System.Windows.Forms.Button buttonSelectNotes;
         private System.Windows.Forms.Button buttonSelectNotes2;
         private System.Windows.Forms.Button buttonSelectWindow2;
+        private System.Windows.Forms.Button buttonReload2;
     }
 }
