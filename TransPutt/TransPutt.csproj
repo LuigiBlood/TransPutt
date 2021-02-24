@@ -60,6 +60,12 @@
     <Compile Include="Games\MarvelousForm.Designer.cs">
       <DependentUpon>MarvelousForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Games\MarvelousFormSearchID.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Games\MarvelousFormSearchID.Designer.cs">
+      <DependentUpon>MarvelousFormSearchID.cs</DependentUpon>
+    </Compile>
     <Compile Include="Graphics.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -69,6 +75,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Games\MarvelousForm.resx">
       <DependentUpon>MarvelousForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Games\MarvelousFormSearchID.resx">
+      <DependentUpon>MarvelousFormSearchID.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
