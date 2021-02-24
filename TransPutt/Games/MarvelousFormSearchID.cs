@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -15,9 +16,12 @@ namespace TransPutt.Games
         public string[] list;
         public int id;
 
+        private System.Threading.Timer timer;
+
         public MarvelousFormSearchID()
         {
             InitializeComponent();
+            timer = new System.Threading.Timer((c) => FilterUpdateListBox(), null, Timeout.Infinite, Timeout.Infinite);
         }
 
         private void MarvelousFormSearchID_Load(object sender, EventArgs e)
@@ -27,7 +31,8 @@ namespace TransPutt.Games
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            FilterUpdateListBox(textBox1.Text);
+            //Delay ListBox Update so it doesn't stutter
+            timer.Change(250, Timeout.Infinite);
         }
 
         private void buttonOK_Click(object sender, EventArgs e)
@@ -47,30 +52,37 @@ namespace TransPutt.Games
         }
 
 
-        private void FilterUpdateListBox(string filter = "")
+        private void FilterUpdateListBox()
         {
-            List<string> newlist = new List<string>();
-            int idx = -1;
-
-            for (int i = 0; i < list.Length; i++)
+            if (this.InvokeRequired)
             {
-                if (list[i].Contains(filter))
+                this.Invoke(new Action(FilterUpdateListBox));
+            }
+            else
+            {
+                //Search via Filter
+                string filter = textBox1.Text;
+                List<string> newlist = new List<string>();
+                int idx = -1;
+
+                for (int i = 0; i < list.Length; i++)
                 {
-                    newlist.Add(i + ": " + list[i]);
-                    if (i == id) idx = newlist.Count - 1;
+                    if (list[i].Contains(filter))
+                    {
+                        newlist.Add(i + ": " + list[i]);
+                        if (i == id) idx = newlist.Count - 1;
+                    }
                 }
+
+                //Update ListBox
+                listBox1.SuspendLayout();
+                listBox1.Items.Clear();
+
+                listBox1.Items.AddRange(newlist.ToArray());
+
+                if (idx != -1) listBox1.SelectedIndex = idx;
+                listBox1.ResumeLayout();
             }
-
-            listBox1.SuspendLayout();
-            listBox1.Items.Clear();
-
-            foreach (string s in newlist)
-            {
-                listBox1.Items.Add(s);
-            }
-
-            if (idx != -1) listBox1.SelectedIndex = idx;
-            listBox1.ResumeLayout();
         }
 
         private int GetIDFromList(int i)
