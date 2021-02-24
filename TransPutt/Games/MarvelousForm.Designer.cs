@@ -423,7 +423,7 @@
             this.buttonSelectText.Name = "buttonSelectText";
             this.buttonSelectText.Size = new System.Drawing.Size(121, 23);
             this.buttonSelectText.TabIndex = 23;
-            this.buttonSelectText.Text = "Select ID... (By Text)";
+            this.buttonSelectText.Text = "Search ID... (By Text)";
             this.buttonSelectText.UseVisualStyleBackColor = true;
             this.buttonSelectText.Click += new System.EventHandler(this.buttonSelectText_Click);
             // 
@@ -453,7 +453,7 @@
             this.buttonSelectWindow2.Name = "buttonSelectWindow2";
             this.buttonSelectWindow2.Size = new System.Drawing.Size(121, 23);
             this.buttonSelectWindow2.TabIndex = 25;
-            this.buttonSelectWindow2.Text = "Select ID... (By Text)";
+            this.buttonSelectWindow2.Text = "Search ID... (By Text)";
             this.buttonSelectWindow2.UseVisualStyleBackColor = true;
             this.buttonSelectWindow2.Click += new System.EventHandler(this.buttonSelectWindow2_Click);
             // 
