@@ -229,28 +229,28 @@ namespace TransPutt.Games
 
         private void buttonSelectText_Click(object sender, EventArgs e)
         {
-            int temp = GetSelectID(lang1, false);
+            int temp = Math.Min(GetSelectID(lang1, false), (int)numericUpDownID1.Maximum);
             if (temp >= 0)
                 numericUpDownID1.Value = temp;
         }
 
         private void buttonSelectNotes_Click(object sender, EventArgs e)
         {
-            int temp = GetSelectID(lang1, true);
+            int temp = Math.Min(GetSelectID(lang1, true), (int)numericUpDownID1.Maximum);
             if (temp >= 0)
                 numericUpDownID1.Value = temp;
         }
 
         private void buttonSelectWindow2_Click(object sender, EventArgs e)
         {
-            int temp = GetSelectID(lang2, false);
+            int temp = Math.Min(GetSelectID(lang2, false), (int)numericUpDownID1.Maximum);
             if (temp >= 0)
                 numericUpDownID1.Value = temp;
         }
 
         private void buttonSelectNotes2_Click(object sender, EventArgs e)
         {
-            int temp = GetSelectID(lang2, true);
+            int temp = Math.Min(GetSelectID(lang2, true), (int)numericUpDownID1.Maximum);
             if (temp >= 0)
                 numericUpDownID1.Value = temp;
         }
