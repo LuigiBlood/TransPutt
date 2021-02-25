@@ -29,6 +29,9 @@ namespace TransPutt.Games
         lang lang1;
         lang lang2;
         bool hasChanged;
+        // added skipRefresh and maxWidthExceeded "FORM GLOBALS"
+        bool skipRefresh = false;
+        bool maxWidthExceeded = false;
 
         int curIndex = -1;
 
@@ -97,6 +100,8 @@ namespace TransPutt.Games
 
         private void textBoxText1_TextChanged(object sender, EventArgs e)
         {
+            if (skipRefresh) return;  // skip this. we're busy doing some hacky stuff...
+
             UpdatePictureBox(pictureBoxPreview1, textBoxText1, lang1);
             UpdateSaveAllButton();
         }
@@ -433,6 +438,7 @@ namespace TransPutt.Games
 
         private Bitmap RenderText(string text, lang curlang, int style)
         {
+            maxWidthExceeded = false;
             //Styles: 1 = Regular Text Box (black on white), 2 = Small Text (white on black), 3 = With border (black border, white font)
             int maxwidth = 0;
             if (style == 0)
@@ -629,6 +635,8 @@ namespace TransPutt.Games
                         g.DrawImageUnscaled(char_gfx, h_pixel, line * 32);
                     }
                     h_pixel += char_gfx.Width;
+                    // added a check to see if we exceeded our horizontal screen space
+                    if (h_pixel > maxwidth) maxWidthExceeded = true;
                 }
             }
 
@@ -966,6 +974,126 @@ namespace TransPutt.Games
                 return idForm.id;
             else
                 return -1;
+        }
+
+        private void reformatTextToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            /*
+             This reformats the currently displayed text and adds required linebreaks
+             It's a little buggy, so dont go willy-nilly re-formatting everything all at once.
+            */
+
+            // Always back it up first...
+            SaveText(textBoxText1, curIndex, lang1);
+
+            // temp variable for the current text
+            string tb_text = textBoxText1.Text;
+
+            // No need to do anything if the box is blank
+            if (tb_text.Length == 0) return;
+
+            // check for the existing end-of-line tags and remove them and any line break characters
+            var tb_lines = new List<string>();
+            var rem_vals = new Dictionary<string, string>() { 
+                { "[nl2]", " " },
+                { "[nl3]", " " },
+                { "[scl]", " " },
+                { "\r", "" },
+                { "\n", "" },
+                { "\r\n", "" } 
+            };
+            foreach (KeyValuePair<string, string> kp in rem_vals)
+            {
+                tb_text = tb_text.Replace(kp.Key, kp.Value);
+            }
+
+            // initialize our loop vars... 
+            // skipRefresh is turned ON (prevents the form from firing the text changed event for the text box)
+            // clear the text box...
+            int pos = 0;
+            bool reading_var = false;
+            string cur_line = "";
+            skipRefresh = true;
+            textBoxText1.Text = "";
+
+            // loop through each character in the stored text
+            while (pos < tb_text.Length)
+            {
+                string next_line = "";
+                bool overflow = false; // continue while we havent overflown the horizontal space, or the string hasnt ended
+                while(!overflow && pos < tb_text.Length)
+                {
+                    char cur_char = tb_text[pos];  // the current character
+                    cur_line += cur_char;
+                    if (cur_char == '[') // the start of a tag
+                    {
+                        reading_var = true;
+                    } 
+                    else if (cur_char == ']') // end tag
+                    {
+                        reading_var = false;
+                    }
+                    textBoxText1.Text = cur_line;  // make the textbox only hold the current line
+
+                    if (!reading_var)
+                    {
+                        UpdatePictureBox(pictureBoxPreview1, textBoxText1, lang1); 
+                        // update the picture box and check the global (eww) variable we added that stores whether the horizontal space was exceeded
+                        bool has_overflow = maxWidthExceeded;
+
+                        if (cur_char == ' ' && cur_line.Contains("[np]"))
+                        {
+                            has_overflow = true;  // force the next line if we hit a new page tag
+                        }
+
+                        if (has_overflow)
+                        {
+                            // get each "word" in the string...
+                            var split_line = cur_line.Split(' ');
+                            // the last word probably needs to continue on the next line
+                            int last_index = split_line.Length - 1;
+                            // temporarily store the next line
+                            next_line = split_line[last_index];
+                            // remove the last index from the array
+                            split_line = split_line.Where((source, index) => index != last_index).ToArray();
+                            //rebuild the text on the current line
+                            textBoxText1.Text = String.Join(" ", split_line);
+                            cur_line = next_line;
+                            overflow = true;
+                        }
+                    }
+                    pos += 1;
+                }
+
+                // save textbox text as a line
+                if (textBoxText1.Text.Length > 0) tb_lines.Add(textBoxText1.Text);
+                // if we reach the end of the text before we can save the rest normally-- add the next line to the list
+                if (!(pos < tb_text.Length) && next_line.Length > 0) tb_lines.Add(next_line);
+            }
+
+            if (tb_lines.ToArray().Length > 0)
+            {   // loop through the new list of lines...
+                String[] lines = tb_lines.ToArray();
+                for (int c = 0; c < lines.Length; c++)
+                {
+                    if (c == 0)
+                    {   // first line is always set this way
+                        tb_text = lines[c];
+                    }
+                    else if (c == 1 || c == 2)
+                    {   // second and thrid lines are a special tag
+                        tb_text += "\r\n[nl" + (c + 1) + "]" + lines[c];
+                    } 
+                    else
+                    {   // succeeding lines are the same
+                        tb_text += "\r\n[scl]" + lines[c];
+                    }
+                }
+            }
+            // turn back on the refresh event
+            skipRefresh = false;
+            // update the text box
+            textBoxText1.Text = tb_text;
         }
     }
 }

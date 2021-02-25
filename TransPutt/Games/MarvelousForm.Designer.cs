@@ -70,6 +70,7 @@
             this.buttonSelectNotes2 = new System.Windows.Forms.Button();
             this.buttonSelectWindow2 = new System.Windows.Forms.Button();
             this.buttonReload2 = new System.Windows.Forms.Button();
+            this.reformatTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownID1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview1)).BeginInit();
             this.panel1.SuspendLayout();
@@ -344,7 +345,8 @@
             this.line1ToolStripMenuItem,
             this.line2ToolStripMenuItem,
             this.line3ToolStripMenuItem,
-            this.scrollToolStripMenuItem});
+            this.scrollToolStripMenuItem,
+            this.reformatTextToolStripMenuItem});
             this.shortcutsToolStripMenuItem.Name = "shortcutsToolStripMenuItem";
             this.shortcutsToolStripMenuItem.Size = new System.Drawing.Size(69, 20);
             this.shortcutsToolStripMenuItem.Text = "Shortcuts";
@@ -353,7 +355,7 @@
             // 
             this.line1ToolStripMenuItem.Name = "line1ToolStripMenuItem";
             this.line1ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D1)));
-            this.line1ToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.line1ToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
             this.line1ToolStripMenuItem.Text = "Line 1";
             this.line1ToolStripMenuItem.Click += new System.EventHandler(this.line1ToolStripMenuItem_Click);
             // 
@@ -361,7 +363,7 @@
             // 
             this.line2ToolStripMenuItem.Name = "line2ToolStripMenuItem";
             this.line2ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D2)));
-            this.line2ToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.line2ToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
             this.line2ToolStripMenuItem.Text = "Line 2";
             this.line2ToolStripMenuItem.Click += new System.EventHandler(this.line2ToolStripMenuItem_Click);
             // 
@@ -369,7 +371,7 @@
             // 
             this.line3ToolStripMenuItem.Name = "line3ToolStripMenuItem";
             this.line3ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D3)));
-            this.line3ToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.line3ToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
             this.line3ToolStripMenuItem.Text = "Line 3";
             this.line3ToolStripMenuItem.Click += new System.EventHandler(this.line3ToolStripMenuItem_Click);
             // 
@@ -377,7 +379,7 @@
             // 
             this.scrollToolStripMenuItem.Name = "scrollToolStripMenuItem";
             this.scrollToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D4)));
-            this.scrollToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.scrollToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
             this.scrollToolStripMenuItem.Text = "Scroll";
             this.scrollToolStripMenuItem.Click += new System.EventHandler(this.scrollToolStripMenuItem_Click);
             // 
@@ -466,6 +468,15 @@
             this.buttonReload2.Text = "Reload";
             this.buttonReload2.UseVisualStyleBackColor = true;
             this.buttonReload2.Click += new System.EventHandler(this.comboBoxLang2_SelectedIndexChanged);
+            // 
+            // reformatTextToolStripMenuItem
+            // 
+            this.reformatTextToolStripMenuItem.Name = "reformatTextToolStripMenuItem";
+            this.reformatTextToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.R)));
+            this.reformatTextToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.reformatTextToolStripMenuItem.Text = "Auto-format Text";
+            this.reformatTextToolStripMenuItem.Click += new System.EventHandler(this.reformatTextToolStripMenuItem_Click);
             // 
             // MarvelousForm
             // 
@@ -566,5 +577,6 @@
         private System.Windows.Forms.Button buttonSelectNotes2;
         private System.Windows.Forms.Button buttonSelectWindow2;
         private System.Windows.Forms.Button buttonReload2;
+        private System.Windows.Forms.ToolStripMenuItem reformatTextToolStripMenuItem;
     }
 }
