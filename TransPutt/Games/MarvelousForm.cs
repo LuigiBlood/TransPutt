@@ -24,11 +24,16 @@ namespace TransPutt.Games
             public string[] main_txt;                  //main.txt - Main Text File
             public string[] main_end;                  //Keeps all End Commands in mind
             public string[] notes;                     //notes.txt - Notes
+            public string[] nl_tags;                   //Holds all new line tags so we don't have to keep finding them 
+            public string[] end_tags;                  //Storing end command tags here
         }
 
         lang lang1;
         lang lang2;
         bool hasChanged;
+        // added skipRefresh and maxWidthExceeded "FORM GLOBALS"
+        bool skipRefresh = false;
+        bool maxWidthExceeded = false;
 
         int curIndex = -1;
 
@@ -97,6 +102,8 @@ namespace TransPutt.Games
 
         private void textBoxText1_TextChanged(object sender, EventArgs e)
         {
+            if (skipRefresh) return;  // skip this. we're busy doing some hacky stuff...
+
             UpdatePictureBox(pictureBoxPreview1, textBoxText1, lang1);
             UpdateSaveAllButton();
         }
@@ -255,8 +262,6 @@ namespace TransPutt.Games
                 numericUpDownID1.Value = temp;
         }
 
-
-
         //--Text Functions
         private void LoadLanguage(string lang, out lang outlang)
         {
@@ -274,43 +279,49 @@ namespace TransPutt.Games
             List<string> list_end = new List<string>();
             string temp = File.ReadAllText(fullpath + "main.txt");
 
-            //Find End Commands
+            //Find End Commands and new line tags
             string en1 = "";
             string en2 = "";
+            string nl2 = "";
+            string nl3 = "";
+            string scl = "";
+            string np = ""; //FE69
             for (int i = 0; i < outlang.table.Count; i++)
             {
                 if (outlang.table[i].Item1 == "FA")
                     en1 = outlang.table[i].Item2;
                 if (outlang.table[i].Item1 == "FB")
                     en2 = outlang.table[i].Item2;
-                if (en1 != "" && en2 != "")
+                if (outlang.table[i].Item1 == "F8")  // nl2
+                    nl2 = outlang.table[i].Item2;
+                if (outlang.table[i].Item1 == "F9")  // nl3
+                    nl3 = outlang.table[i].Item2;
+                if (outlang.table[i].Item1 == "F6")  // scl
+                    scl = outlang.table[i].Item2;
+                if (outlang.table[i].Item1 == "FE69")  // np
+                    np = outlang.table[i].Item2;
+                if (en1 != "" && en2 != "" && nl2 != "" && nl3 != "" && scl != "" && np != "")
                     break;
             }
+            outlang.end_tags = new string[] { en1, en2 }; // storing to negate future searching...
+            outlang.nl_tags = new string[] { "", nl2, nl3, scl, np };  // stored in order
 
-            //Put all script in string array, seperated by end commands
+            //Put all script in string array, separated by end commands
             int lastidx = 0;
             for (int i = 0; i < temp.Length; i++)
             {
-                if (((temp.Length - i) > en1.Length))
+                for (int e = 0; e < outlang.end_tags.Length; e++)
                 {
-                    if (temp.Substring(i, en1.Length) == en1)
+                    if (((temp.Length - i) > outlang.end_tags[e].Length))
                     {
-                        i--;
-                        list_txt.Add(temp.Substring(lastidx, i - lastidx).Trim().Replace("\r\n", "\n"));
-                        i += en1.Length;
-                        list_end.Add(en1);
-                        lastidx = i + 1;
-                    }
-                }
-                if (((temp.Length - i) > en2.Length))
-                {
-                    if (temp.Substring(i, en2.Length) == en2)
-                    {
-                        i--;
-                        list_txt.Add(temp.Substring(lastidx, i - lastidx).Trim().Replace("\r\n", "\n"));
-                        i += en2.Length;
-                        list_end.Add(en2);
-                        lastidx = i + 1;
+                        if (temp.Substring(i, outlang.end_tags[e].Length) == outlang.end_tags[e])
+                        {
+                            i--;
+                            list_txt.Add(temp.Substring(lastidx, i - lastidx).Trim().Replace("\r\n", "\n"));
+                            i += outlang.end_tags[e].Length;
+                            list_end.Add(outlang.end_tags[e]);
+                            lastidx = i + 1;
+                        }
                     }
                 }
             }
@@ -368,20 +379,13 @@ namespace TransPutt.Games
             if (!isTextDifferent(textBoxText1, curIndex, lang1))
                 return;
 
-            //Find End Commands
-            string en1 = "";
-            string en2 = "";
-            for (int i = 0; i < inlang.table.Count; i++)
+            // remove all stored end command tags
+            inlang.main_txt[id] = textBox.Text.Replace("\r\n", "\n");
+            for (int e = 0; e < inlang.end_tags.Length; e++)
             {
-                if (inlang.table[i].Item1 == "FA")
-                    en1 = inlang.table[i].Item2;
-                if (inlang.table[i].Item1 == "FB")
-                    en2 = inlang.table[i].Item2;
-                if (en1 != "" && en2 != "")
-                    break;
+                inlang.main_txt[id].Replace(inlang.end_tags[e], "");
             }
 
-            inlang.main_txt[id] = textBox.Text.Replace(en1, "").Replace(en2, "").Replace("\r\n", "\n");
             hasChanged = true;
             toolStripStatusLabel1.Text = "Saved Text ID " + id + " to memory.";
         }
@@ -433,6 +437,7 @@ namespace TransPutt.Games
 
         private Bitmap RenderText(string text, lang curlang, int style)
         {
+            maxWidthExceeded = false;
             //Styles: 1 = Regular Text Box (black on white), 2 = Small Text (white on black), 3 = With border (black border, white font)
             int maxwidth = 0;
             if (style == 0)
@@ -629,6 +634,8 @@ namespace TransPutt.Games
                         g.DrawImageUnscaled(char_gfx, h_pixel, line * 32);
                     }
                     h_pixel += char_gfx.Width;
+                    // added a check to see if we exceeded our horizontal screen space
+                    if (h_pixel > maxwidth) maxWidthExceeded = true;
                 }
             }
 
@@ -966,6 +973,120 @@ namespace TransPutt.Games
                 return idForm.id;
             else
                 return -1;
+        }
+
+        private void reformatTextToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            /*
+             This reformats the currently displayed text and adds required linebreaks
+             It's a little buggy, so dont go willy-nilly re-formatting everything all at once.
+            */
+
+            // Always back it up first...
+            SaveText(textBoxText1, curIndex, lang1);
+
+            // temp variable for the current text
+            string tb_text = textBoxText1.Text;
+
+            // No need to do anything if the box is blank
+            if (tb_text.Length == 0) return;
+
+            // check for the existing end-of-line tags and remove them and any line break characters
+            var tb_lines = new List<string>();
+            var rem_vals = new Dictionary<string, string>() { 
+                { "[nl2]", " " },
+                { "[nl3]", " " },
+                { "[scl]", " " },
+                { "\r", "" },
+                { "\n", "" },
+                { "\r\n", "" } 
+            };
+            foreach (KeyValuePair<string, string> kp in rem_vals)
+            {
+                tb_text = tb_text.Replace(kp.Key, kp.Value);
+            }
+
+            // initialize our loop vars... 
+            // skipRefresh is turned ON (prevents the form from firing the text changed event for the text box)
+            // clear the text box...
+            int pos = 0;
+            bool reading_var = false;
+            string cur_line = "";
+            skipRefresh = true;
+            textBoxText1.Text = "";
+            var nl = lang1.nl_tags;  // new line tags are now loaded with the lang struct
+
+            // loop through each character in the stored text
+            while (pos < tb_text.Length)
+            {
+                string next_line = "";
+                bool overflow = false; // continue while we havent overflown the horizontal space, or the string hasnt ended
+                while(!overflow && pos < tb_text.Length)
+                {
+                    char cur_char = tb_text[pos];  // the current character
+                    cur_line += cur_char;
+                    if (cur_char == '[') // the start of a tag
+                    {
+                        reading_var = true;
+                    } 
+                    else if (cur_char == ']') // end tag
+                    {
+                        reading_var = false;
+                    }
+                    textBoxText1.Text = cur_line;  // make the textbox only hold the current line
+
+                    if (!reading_var)
+                    {
+                        UpdatePictureBox(pictureBoxPreview1, textBoxText1, lang1); 
+                        // update the picture box and check the global (eww) variable we added that stores whether the horizontal space was exceeded
+                        bool has_overflow = maxWidthExceeded;
+
+                        if (nl[4].Length > 0 && cur_char == ' ' && cur_line.Contains(nl[4])) // np
+                        {
+                            has_overflow = true;  // force the next line if we hit a new page tag
+                        }
+
+                        if (has_overflow)
+                        {
+                            // get each "word" in the string...
+                            var split_line = cur_line.Split(' ');
+                            // the last word probably needs to continue on the next line
+                            int last_index = split_line.Length - 1;
+                            // temporarily store the next line
+                            next_line = split_line[last_index];
+                            // remove the last index from the array
+                            split_line = split_line.Where((source, index) => index != last_index).ToArray();
+                            //rebuild the text on the current line
+                            textBoxText1.Text = String.Join(" ", split_line);
+                            cur_line = next_line;
+                            overflow = true;
+                        }
+                    }
+                    pos += 1;
+                }
+
+                // save textbox text as a line
+                if (textBoxText1.Text.Length > 0) tb_lines.Add(textBoxText1.Text);
+                // if we reach the end of the text before we can save the rest normally-- add the next line to the list
+                if (!(pos < tb_text.Length) && next_line.Length > 0) tb_lines.Add(next_line);
+            }
+
+            if (tb_lines.ToArray().Length > 0)
+            {   // loop through the new list of lines...
+                tb_text = "";
+                String[] lines = tb_lines.ToArray();
+                for (int c = 0; c < lines.Length; c++)
+                {
+                    // lines > 3 all have the same line break code
+                    int nl_idx = (c < 3) ? c : 3;
+                    // add tags to the required lines
+                    tb_text += $"{((c > 0) ? "\r\n" : "")}{nl[nl_idx]}{lines[c]}";
+                }
+            }
+            // turn back on the refresh event
+            skipRefresh = false;
+            // update the text box
+            textBoxText1.Text = tb_text;
         }
     }
 }
