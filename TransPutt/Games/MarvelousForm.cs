@@ -994,9 +994,9 @@ namespace TransPutt.Games
             // check for the existing end-of-line tags and remove them and any line break characters
             var tb_lines = new List<string>();
             var rem_vals = new Dictionary<string, string>() { 
-                { "[nl2]", " " },
-                { "[nl3]", " " },
-                { "[scl]", " " },
+                { lang1.nl_tags[1], " " },
+                { lang1.nl_tags[2], " " },
+                { lang1.nl_tags[3], " " },
                 { "\r", "" },
                 { "\n", "" },
                 { "\r\n", "" } 
