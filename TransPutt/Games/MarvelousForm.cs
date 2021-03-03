@@ -83,6 +83,7 @@ namespace TransPutt.Games
                 }
             }
             LoadLanguage((string)comboBoxLang1.SelectedItem, out lang1);
+            UpdateTableTab(lang1);
             numericUpDownID1.Minimum = 0;
             numericUpDownID1.Maximum = lang1.main_txt.Length - 1;
             curIndex = (int)numericUpDownID1.Value;
@@ -433,6 +434,50 @@ namespace TransPutt.Games
         {
             buttonSaveAll1.Enabled = hasChanged || isTextDifferent(textBoxText1, curIndex, lang1) || (lang1.notes[curIndex] != textBoxDesc1.Text.Replace("\r\n", "\\"));
             saveToFileToolStripMenuItem.Enabled = buttonSaveAll1.Enabled;
+        }
+
+        private void UpdateTableTab(lang curlang)
+        {
+            //Update Table Raw
+            listBoxTableRaw.Items.Clear();
+            List<Tuple<string, string>> tbl = new List<Tuple<string, string>>();
+            tbl.AddRange(curlang.table);
+            tbl.Sort();
+            foreach (Tuple<string, string> s in tbl)
+                listBoxTableRaw.Items.Add(s.Item1 + "=" + s.Item2);
+            
+
+            //Update Regular PictureBox
+            //16 chars per line, from 00 to EF
+            Bitmap regular = new Bitmap(16 * 16, 32 * 15);
+            for (int i = 0; i < 0xF0; i++)
+            {
+                using (Graphics g = Graphics.FromImage(regular))
+                {
+                    g.DrawImageUnscaled(RenderChar(i, curlang, 3), (i % 16) * 16, (i / 16) * 32);
+                    g.DrawLine(new Pen(Color.FromArgb(128, 255, 0, 0)), ((i % 16) * 16) + 15, (i / 16) * 32, ((i % 16) * 16) + 15, ((i / 16) * 32) + 32);
+                    g.DrawLine(new Pen(Color.FromArgb(128, 255, 0,0 )), ((i % 16) * 16), ((i / 16) * 32) + 32, ((i % 16) * 16) + 15, ((i / 16) * 32) + 32);
+                }
+            }
+            pictureBoxTable_Regular.Image = regular;
+            pictureBoxTable_Regular.Width = regular.Width;
+            pictureBoxTable_Regular.Height = regular.Height;
+
+            //Update Kanji PictureBox
+            //16 chars per line, from 0x0100 to 0x036F
+            Bitmap kanji = new Bitmap(16 * 16, 32 * 39);
+            for (int i = 0x100; i < 0x370; i++)
+            {
+                using (Graphics g = Graphics.FromImage(kanji))
+                {
+                    g.DrawImageUnscaled(RenderChar(i, curlang, 3), ((i - 0x100) % 16) * 16, ((i - 0x100) / 16) * 32);
+                    g.DrawLine(new Pen(Color.FromArgb(128, 255, 0, 0)), (((i - 0x100) % 16) * 16) + 15, ((i - 0x100) / 16) * 32, (((i - 0x100) % 16) * 16) + 15, (((i - 0x100) / 16) * 32) + 32);
+                    g.DrawLine(new Pen(Color.FromArgb(128, 255, 0, 0)), (((i - 0x100) % 16) * 16), (((i - 0x100) / 16) * 32) + 32, (((i - 0x100) % 16) * 16) + 15, (((i - 0x100) / 16) * 32) + 32);
+                }
+            }
+            pictureBoxTable_Kanji.Image = kanji;
+            pictureBoxTable_Kanji.Width = kanji.Width;
+            pictureBoxTable_Kanji.Height = kanji.Height;
         }
 
         private Bitmap RenderText(string text, lang curlang, int style)
@@ -908,6 +953,12 @@ namespace TransPutt.Games
                 pal[2] = Color.White;
             if (style == 2)
                 pal[1] = Color.Black;
+            if (style == 3)
+            {
+                pal[1] = Color.Black;
+                pal[2] = Color.Gray;
+                pal[3] = Color.White;
+            }
 
             Bitmap gfx = new Bitmap(curlang.width_tbl[id], 32);
 
@@ -1087,6 +1138,51 @@ namespace TransPutt.Games
             skipRefresh = false;
             // update the text box
             textBoxText1.Text = tb_text;
+        }
+
+        private void pictureBoxTable_Regular_Click(object sender, EventArgs e)
+        {
+            MouseEventArgs me = (MouseEventArgs)e;
+            int id = (me.X / 16) + ((me.Y / 32) * 16);
+            textBox_SelectID.Text = id.ToString("X2");
+            textBox_SelectChar.Text = "";
+            foreach (var c in lang1.table)
+            {
+                if (c.Item1 == id.ToString("X2"))
+                {
+                    textBox_SelectChar.Text = c.Item2;
+                    break;
+                }
+            }
+        }
+
+        private void pictureBoxTable_Kanji_Click(object sender, EventArgs e)
+        {
+            MouseEventArgs me = (MouseEventArgs)e;
+            int id = (me.X / 16) + ((me.Y / 32) * 16);
+            string cid;
+            if (id < 0x100)
+                cid = "FD" + (id - 0x000).ToString("X2");
+            else if (id < 0x200)
+                cid = "FC" + (id - 0x100).ToString("X2");
+            else
+                cid = "F4" + (id - 0x200).ToString("X2");
+
+            textBox_SelectID.Text = cid;
+            textBox_SelectChar.Text = "";
+            foreach (var c in lang1.table)
+            {
+                if (c.Item1 == cid)
+                {
+                    textBox_SelectChar.Text = c.Item2;
+                    break;
+                }
+            }
+        }
+
+        private void buttonCopySelect_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(textBox_SelectChar.Text);
         }
     }
 }
