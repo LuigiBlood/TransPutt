@@ -50,9 +50,9 @@ namespace TransPutt.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public string marv_last_index {
+        public int marv_last_index {
             get {
-                return ((string)(this["marv_last_index"]));
+                return ((int)(this["marv_last_index"]));
             }
             set {
                 this["marv_last_index"] = value;
@@ -62,9 +62,9 @@ namespace TransPutt.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public string marv_text_type {
+        public int marv_text_type {
             get {
-                return ((string)(this["marv_text_type"]));
+                return ((int)(this["marv_text_type"]));
             }
             set {
                 this["marv_text_type"] = value;
