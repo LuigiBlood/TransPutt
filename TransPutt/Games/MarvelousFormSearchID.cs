@@ -42,7 +42,8 @@ namespace TransPutt.Games
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            id = GetIDFromList(listBox1.SelectedIndex);
+            if (listBox1.SelectedIndex > -1)
+                id = GetIDFromList(listBox1.SelectedIndex);
         }
 
         private void listBox1_DoubleClick(object sender, EventArgs e)
