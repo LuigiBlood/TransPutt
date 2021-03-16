@@ -75,6 +75,11 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.buttonCopySelect = new System.Windows.Forms.Button();
+            this.textBox_SelectChar = new System.Windows.Forms.TextBox();
+            this.textBox_SelectID = new System.Windows.Forms.TextBox();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.pictureBoxTable_Regular = new System.Windows.Forms.PictureBox();
@@ -84,11 +89,6 @@
             this.pictureBoxTable_Other = new System.Windows.Forms.PictureBox();
             this.tabPage6 = new System.Windows.Forms.TabPage();
             this.listBoxTableRaw = new System.Windows.Forms.ListBox();
-            this.textBox_SelectID = new System.Windows.Forms.TextBox();
-            this.textBox_SelectChar = new System.Windows.Forms.TextBox();
-            this.buttonCopySelect = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownID1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview1)).BeginInit();
             this.panel1.SuspendLayout();
@@ -566,6 +566,50 @@
             this.tabPage2.Text = "Table List";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(315, 91);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(37, 13);
+            this.label9.TabIndex = 5;
+            this.label9.Text = "Table:";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(315, 37);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(21, 13);
+            this.label5.TabIndex = 4;
+            this.label5.Text = "ID:";
+            // 
+            // buttonCopySelect
+            // 
+            this.buttonCopySelect.Location = new System.Drawing.Point(324, 146);
+            this.buttonCopySelect.Name = "buttonCopySelect";
+            this.buttonCopySelect.Size = new System.Drawing.Size(75, 23);
+            this.buttonCopySelect.TabIndex = 3;
+            this.buttonCopySelect.Text = "Copy";
+            this.buttonCopySelect.UseVisualStyleBackColor = true;
+            this.buttonCopySelect.Click += new System.EventHandler(this.buttonCopySelect_Click);
+            // 
+            // textBox_SelectChar
+            // 
+            this.textBox_SelectChar.Enabled = false;
+            this.textBox_SelectChar.Location = new System.Drawing.Point(318, 107);
+            this.textBox_SelectChar.Name = "textBox_SelectChar";
+            this.textBox_SelectChar.Size = new System.Drawing.Size(86, 20);
+            this.textBox_SelectChar.TabIndex = 2;
+            // 
+            // textBox_SelectID
+            // 
+            this.textBox_SelectID.Enabled = false;
+            this.textBox_SelectID.Location = new System.Drawing.Point(318, 53);
+            this.textBox_SelectID.Name = "textBox_SelectID";
+            this.textBox_SelectID.Size = new System.Drawing.Size(86, 20);
+            this.textBox_SelectID.TabIndex = 1;
+            // 
             // tabControl2
             // 
             this.tabControl2.Controls.Add(this.tabPage3);
@@ -638,6 +682,7 @@
             this.pictureBoxTable_Other.Size = new System.Drawing.Size(100, 50);
             this.pictureBoxTable_Other.TabIndex = 0;
             this.pictureBoxTable_Other.TabStop = false;
+            this.pictureBoxTable_Other.Click += new System.EventHandler(this.pictureBoxTable_Other_Click);
             // 
             // tabPage6
             // 
@@ -656,50 +701,6 @@
             this.listBoxTableRaw.Name = "listBoxTableRaw";
             this.listBoxTableRaw.Size = new System.Drawing.Size(293, 303);
             this.listBoxTableRaw.TabIndex = 0;
-            // 
-            // textBox_SelectID
-            // 
-            this.textBox_SelectID.Enabled = false;
-            this.textBox_SelectID.Location = new System.Drawing.Point(318, 53);
-            this.textBox_SelectID.Name = "textBox_SelectID";
-            this.textBox_SelectID.Size = new System.Drawing.Size(86, 20);
-            this.textBox_SelectID.TabIndex = 1;
-            // 
-            // textBox_SelectChar
-            // 
-            this.textBox_SelectChar.Enabled = false;
-            this.textBox_SelectChar.Location = new System.Drawing.Point(318, 107);
-            this.textBox_SelectChar.Name = "textBox_SelectChar";
-            this.textBox_SelectChar.Size = new System.Drawing.Size(86, 20);
-            this.textBox_SelectChar.TabIndex = 2;
-            // 
-            // buttonCopySelect
-            // 
-            this.buttonCopySelect.Location = new System.Drawing.Point(324, 146);
-            this.buttonCopySelect.Name = "buttonCopySelect";
-            this.buttonCopySelect.Size = new System.Drawing.Size(75, 23);
-            this.buttonCopySelect.TabIndex = 3;
-            this.buttonCopySelect.Text = "Copy";
-            this.buttonCopySelect.UseVisualStyleBackColor = true;
-            this.buttonCopySelect.Click += new System.EventHandler(this.buttonCopySelect_Click);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(315, 37);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(21, 13);
-            this.label5.TabIndex = 4;
-            this.label5.Text = "ID:";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(315, 91);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(37, 13);
-            this.label9.TabIndex = 5;
-            this.label9.Text = "Table:";
             // 
             // MarvelousForm
             // 

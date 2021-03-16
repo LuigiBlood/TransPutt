@@ -28,6 +28,11 @@ namespace TransPutt.Games
             public string[] end_tags;                  //Storing end command tags here
         }
 
+        static byte[] other_list = { 0x00, 0x02, 0x04, 0x06, 0x08, 0x14, 0x0A, 0x54,
+                                     0x0C, 0x0E, 0x10, 0x36, 0x44, 0x46, 0x48, 0x4A,
+                                     0x4C, 0x4E, 0x50, 0x52, 0x1E, 0x20, 0x22, 0x24,
+                                     0x26, 0x28, 0x2A, 0x2C, 0x2E, 0x30 };
+
         lang lang1;
         lang lang2;
         bool hasChanged;
@@ -478,6 +483,21 @@ namespace TransPutt.Games
             pictureBoxTable_Kanji.Image = kanji;
             pictureBoxTable_Kanji.Width = kanji.Width;
             pictureBoxTable_Kanji.Height = kanji.Height;
+
+            //Update Other PictureBox
+            //8 icons per line, defined by table
+            Bitmap other = new Bitmap(8 * 32, 32 * (int)Math.Ceiling(other_list.Length / 8.0));
+            for (int i = 0; i < other_list.Length; i++)
+            {
+                using (Graphics g = Graphics.FromImage(other))
+                {
+                    g.DrawImageUnscaled(RenderIcon(other_list[i], curlang, 3), (i % 8) * 32, (i / 8) * 32);
+                }
+            }
+
+            pictureBoxTable_Other.Image = other;
+            pictureBoxTable_Other.Width = other.Width;
+            pictureBoxTable_Other.Height = other.Height;
         }
 
         private Bitmap RenderText(string text, lang curlang, int style)
@@ -1168,6 +1188,27 @@ namespace TransPutt.Games
             else
                 cid = "F4" + (id - 0x200).ToString("X2");
 
+            textBox_SelectID.Text = cid;
+            textBox_SelectChar.Text = "";
+            foreach (var c in lang1.table)
+            {
+                if (c.Item1 == cid)
+                {
+                    textBox_SelectChar.Text = c.Item2;
+                    break;
+                }
+            }
+        }
+
+        private void pictureBoxTable_Other_Click(object sender, EventArgs e)
+        {
+            MouseEventArgs me = (MouseEventArgs)e;
+            int id = (me.X / 32) + ((me.Y / 32) * 8);
+
+            if (id >= other_list.Length)
+                return;
+
+            string cid = "FE6D"+ other_list[id].ToString("X2");
             textBox_SelectID.Text = cid;
             textBox_SelectChar.Text = "";
             foreach (var c in lang1.table)
