@@ -13,6 +13,13 @@ namespace TransPutt.Games
 {
     public partial class MarvelousForm : Form
     {
+        struct ControlTags
+        {
+            public string new_page;                    // the new page tag
+            public string[] nl_tags;                   //holds all new line tags so we don't have to keep finding them
+            public string[] end_tags;                  //storing end command tags here
+            public string[] multi_char_tags;           //multi-character tags are not evaluated for render width until all are evaluated
+        }
         struct lang
         {
             public string name;
@@ -24,10 +31,7 @@ namespace TransPutt.Games
             public string[] main_txt;                  //main.txt - Main Text File
             public string[] main_end;                  //Keeps all End Commands in mind
             public string[] notes;                     //notes.txt - Notes
-            public string[] nl_tags;                   //holds all new line tags so we don't have to keep finding them
-            public string new_page;
-            public string[] end_tags;                  //storing end command tags here
-            public string[] multi_char_tags;           //multi-character tags are not evaluated for render width until all are evaluated
+            public ControlTags tags;                   //consolidated tags
         }
 
         lang lang1;
@@ -124,10 +128,7 @@ namespace TransPutt.Games
 
         private void textBoxText1_TextChanged(object sender, EventArgs e)
         {
-            if (skipRefresh) return;  // skip this. we're busy doing some hacky stuff...
 
-            UpdatePictureBox(pictureBoxPreview1, textBoxText1, lang1);
-            UpdateSaveAllButton();
         }
 
         private void numericUpDownID1_ValueChanged(object sender, EventArgs e)
@@ -334,25 +335,25 @@ namespace TransPutt.Games
                 if (en1 != "" && en2 != "" && nl2 != "" && nl3 != "" && scl != "" && np != "")
                     break;
             }
-            outlang.multi_char_tags = multi_char.ToArray();
-            outlang.end_tags = new string[] { en1, en2 }; // storing to negate future searching...
-            outlang.nl_tags = new string[] { "", nl2, nl3, scl };  // stored in order
-            outlang.new_page = np;
+            outlang.tags.multi_char_tags = multi_char.ToArray();
+            outlang.tags.end_tags = new string[] { en1, en2 }; // storing to negate future searching...
+            outlang.tags.nl_tags = new string[] { "", nl2, nl3, scl };  // stored in order
+            outlang.tags.new_page = np;
 
             //Put all script in string array, separated by end commands
             int lastidx = 0;
             for (int i = 0; i < temp.Length; i++)
             {
-                for (int e = 0; e < outlang.end_tags.Length; e++)
+                for (int e = 0; e < outlang.tags.end_tags.Length; e++)
                 {
-                    if (((temp.Length - i) > outlang.end_tags[e].Length))
+                    if (((temp.Length - i) > outlang.tags.end_tags[e].Length))
                     {
-                        if (temp.Substring(i, outlang.end_tags[e].Length) == outlang.end_tags[e])
+                        if (temp.Substring(i, outlang.tags.end_tags[e].Length) == outlang.tags.end_tags[e])
                         {
                             i--;
                             list_txt.Add(temp.Substring(lastidx, i - lastidx).Trim().Replace("\r\n", "\n"));
-                            i += outlang.end_tags[e].Length;
-                            list_end.Add(outlang.end_tags[e]);
+                            i += outlang.tags.end_tags[e].Length;
+                            list_end.Add(outlang.tags.end_tags[e]);
                             lastidx = i + 1;
                         }
                     }
@@ -414,9 +415,9 @@ namespace TransPutt.Games
 
             // remove all stored end command tags
             inlang.main_txt[id] = textBox.Text.Replace("\r\n", "\n");
-            for (int e = 0; e < inlang.end_tags.Length; e++)
+            for (int e = 0; e < inlang.tags.end_tags.Length; e++)
             {
-                inlang.main_txt[id].Replace(inlang.end_tags[e], "");
+                inlang.main_txt[id].Replace(inlang.tags.end_tags[e], "");
             }
 
             hasChanged = true;
@@ -1076,7 +1077,7 @@ namespace TransPutt.Games
             // No need to do anything if the box is blank
             if (tb_text.Length == 0) return "";
 
-            var nl = lang1.nl_tags;  // new line tags are now loaded with the lang struct
+            var nl = lang1.tags.nl_tags;  // new line tags are now loaded with the lang struct
 
             for (int t = 1; t < 4; t++)
             {   // remove all new line control codes
@@ -1092,7 +1093,7 @@ namespace TransPutt.Games
             string line_before_word = "";
             skipRefresh = true;
             tb.Text = "";
-            var mct = lng.multi_char_tags;
+            var mct = lng.tags.multi_char_tags;
             int all_pos = tb_text.Length;
 
             string[] lString = tb_text.Split(' ');
@@ -1125,10 +1126,11 @@ namespace TransPutt.Games
                     // update the picture box and check the global (eww) variable we added that stores whether the horizontal space was exceeded
                     bool has_overflow = maxWidthExceeded;
 
-                    if (wrd == lng.new_page) // np
+                    if (wrd == lng.tags.new_page) // np
                     {
-                        cur_line += " ";
-                        has_overflow = true;  // force the next line if we hit a new page tag
+                        if (cur_line.Length > 0) tb_lines.Add(cur_line);
+                        cur_line = "";
+                        continue;  // continue on to the next line if we get a new page (make this an option).
                     }
 
                     if (has_overflow)
@@ -1162,7 +1164,7 @@ namespace TransPutt.Games
                         // update the picture box and check the global (eww) variable we added that stores whether the horizontal space was exceeded
                         bool has_overflow = maxWidthExceeded;
 
-                        if (cur_line.Contains(lng.new_page)) // np
+                        if (cur_line.Contains(lng.tags.new_page)) // np
                         {
                             cur_line += " ";
                             has_overflow = true;  // force the next line if we hit a new page tag
@@ -1263,5 +1265,53 @@ namespace TransPutt.Games
         {
             Clipboard.SetText(textBox_SelectChar.Text);
         }
+
+        private void autoGenerateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string tb_text = textBoxText1.Text;
+            for (int t = 1; t < lang1.tags.nl_tags.Length; t++)
+            {   // remove all existing new line control codes
+                tb_text = tb_text.Replace(lang1.tags.nl_tags[t], "");
+            }
+
+            string final_string = "";
+            string[] string_sep = new string[] { "\r\n" };
+            string[] tb_lines = tb_text.Split(string_sep, StringSplitOptions.None);
+            for (int c = 0; c < tb_lines.Length; c++)
+            {
+                if (c < 3)
+                {
+                    final_string += $"{((c > 0) ? "\r\n" : "")}{lang1.tags.nl_tags[c]}{tb_lines[c]}";
+                }
+                else
+                {
+                    final_string += $"\r\n{lang1.tags.nl_tags[3]}{tb_lines[c]}";
+                }
+            }
+            textBoxText1.Text = final_string;
+        }
+
+        private void textBoxText1_KeyDown(object sender, KeyEventArgs e)
+        {
+            skipRefresh = true;
+        }
+
+        private void textBoxText1_KeyUp(object sender, KeyEventArgs e)
+        {
+            skipRefresh = false;
+        }
+
+        string lastText = "";
+        private void refreshTimer_Tick(object sender, EventArgs e)
+        {
+            // moved to keyup so I can hold down buttons if i want...
+            if (skipRefresh || lastText == textBoxText1.Text) return;  // skip this. we're busy doing some hacky stuff...
+
+            lastText = textBoxText1.Text;
+            UpdatePictureBox(pictureBoxPreview1, textBoxText1, lang1);
+            UpdateSaveAllButton();
+        }
     }
+
+
 }
