@@ -13,6 +13,13 @@ namespace TransPutt.Games
 {
     public partial class MarvelousForm : Form
     {
+        struct ControlTags
+        {
+            public string new_page;                    // the new page tag
+            public string[] nl_tags;                   //holds all new line tags so we don't have to keep finding them
+            public string[] end_tags;                  //storing end command tags here
+            public string[] multi_char_tags;           //multi-character tags are not evaluated for render width until all are evaluated
+        }
         struct lang
         {
             public string name;
@@ -24,8 +31,7 @@ namespace TransPutt.Games
             public string[] main_txt;                  //main.txt - Main Text File
             public string[] main_end;                  //Keeps all End Commands in mind
             public string[] notes;                     //notes.txt - Notes
-            public string[] nl_tags;                   //Holds all new line tags so we don't have to keep finding them 
-            public string[] end_tags;                  //Storing end command tags here
+            public ControlTags tags;                   //consolidated tags
         }
 
         static byte[] other_list = { 0x00, 0x02, 0x04, 0x06, 0x08, 0x14, 0x0A, 0x54,
@@ -49,6 +55,9 @@ namespace TransPutt.Games
 
         private void MarvelousForm_Load(object sender, EventArgs e)
         {
+            int lang1_index = 0;
+            int lang2_index = 0;
+            int lang_idx = 0;
             //Get all languages available
             foreach (string path in Directory.GetDirectories(".\\marvelous\\"))
             {
@@ -65,13 +74,29 @@ namespace TransPutt.Games
                 if (!File.Exists(path + "\\main.txt"))
                     continue;
                 string[] split = path.Split(Path.DirectorySeparatorChar);
-                comboBoxLang1.Items.Add(split[split.Length - 1]);
-                comboBoxLang2.Items.Add(split[split.Length - 1]);
+                string lang_name = split[split.Length - 1]; // the name of the folder
+                comboBoxLang1.Items.Add(lang_name);
+                comboBoxLang2.Items.Add(lang_name);
+
+                // find the one that was selected last, if it still exists
+                if (lang_name == Properties.Settings.Default["marv_last_lang1"].ToString())
+                    lang1_index = lang_idx;
+                if (lang_name == Properties.Settings.Default["marv_last_lang2"].ToString())
+                    lang2_index = lang_idx;
+                lang_idx += 1;
             }
 
-            comboBoxLang1.SelectedIndex = 0;
-            comboBoxLang2.SelectedIndex = 0;
-            comboBoxStyle1.SelectedIndex = 0;
+            // set indexes based on the last state of the window
+            comboBoxLang1.SelectedIndex = lang1_index;
+            comboBoxLang2.SelectedIndex = lang2_index;
+            numericUpDownID1.Value = get_int_config("marv_last_index");
+            comboBoxStyle1.SelectedIndex = get_int_config("marv_text_type");
+        }
+
+        private int get_int_config(string name)
+        {  // just gets the config option while avoiding some problems
+            string cfg_val = Properties.Settings.Default[name].ToString();
+            return (cfg_val.Length > 0) ? int.Parse(cfg_val) : 0;
         }
 
         private void comboBoxLang1_SelectedIndexChanged(object sender, EventArgs e)
@@ -108,10 +133,7 @@ namespace TransPutt.Games
 
         private void textBoxText1_TextChanged(object sender, EventArgs e)
         {
-            if (skipRefresh) return;  // skip this. we're busy doing some hacky stuff...
 
-            UpdatePictureBox(pictureBoxPreview1, textBoxText1, lang1);
-            UpdateSaveAllButton();
         }
 
         private void numericUpDownID1_ValueChanged(object sender, EventArgs e)
@@ -170,6 +192,12 @@ namespace TransPutt.Games
                         break;
                 }
             }
+            // save the current state of the editor so it can be loaded next time...
+            Properties.Settings.Default["marv_last_lang1"] = lang1.name;
+            Properties.Settings.Default["marv_last_index"] = curIndex;
+            Properties.Settings.Default["marv_last_lang2"] = lang2.name;
+            Properties.Settings.Default["marv_text_type"] = comboBoxStyle1.SelectedIndex;
+            Properties.Settings.Default.Save();
         }
 
         private void comboBoxStyle1_SelectedIndexChanged(object sender, EventArgs e)
@@ -292,6 +320,7 @@ namespace TransPutt.Games
             string nl3 = "";
             string scl = "";
             string np = ""; //FE69
+            List<string> multi_char = new List<string>();
             for (int i = 0; i < outlang.table.Count; i++)
             {
                 if (outlang.table[i].Item1 == "FA")
@@ -306,26 +335,30 @@ namespace TransPutt.Games
                     scl = outlang.table[i].Item2;
                 if (outlang.table[i].Item1 == "FE69")  // np
                     np = outlang.table[i].Item2;
+                if (outlang.table[i].Item2.Length > 1)
+                    multi_char.Add(outlang.table[i].Item2);  // multi-char tags
                 if (en1 != "" && en2 != "" && nl2 != "" && nl3 != "" && scl != "" && np != "")
                     break;
             }
-            outlang.end_tags = new string[] { en1, en2 }; // storing to negate future searching...
-            outlang.nl_tags = new string[] { "", nl2, nl3, scl, np };  // stored in order
+            outlang.tags.multi_char_tags = multi_char.ToArray();
+            outlang.tags.end_tags = new string[] { en1, en2 }; // storing to negate future searching...
+            outlang.tags.nl_tags = new string[] { "", nl2, nl3, scl };  // stored in order
+            outlang.tags.new_page = np;
 
             //Put all script in string array, separated by end commands
             int lastidx = 0;
             for (int i = 0; i < temp.Length; i++)
             {
-                for (int e = 0; e < outlang.end_tags.Length; e++)
+                for (int e = 0; e < outlang.tags.end_tags.Length; e++)
                 {
-                    if (((temp.Length - i) > outlang.end_tags[e].Length))
+                    if (((temp.Length - i) > outlang.tags.end_tags[e].Length))
                     {
-                        if (temp.Substring(i, outlang.end_tags[e].Length) == outlang.end_tags[e])
+                        if (temp.Substring(i, outlang.tags.end_tags[e].Length) == outlang.tags.end_tags[e])
                         {
                             i--;
                             list_txt.Add(temp.Substring(lastidx, i - lastidx).Trim().Replace("\r\n", "\n"));
-                            i += outlang.end_tags[e].Length;
-                            list_end.Add(outlang.end_tags[e]);
+                            i += outlang.tags.end_tags[e].Length;
+                            list_end.Add(outlang.tags.end_tags[e]);
                             lastidx = i + 1;
                         }
                     }
@@ -387,9 +420,9 @@ namespace TransPutt.Games
 
             // remove all stored end command tags
             inlang.main_txt[id] = textBox.Text.Replace("\r\n", "\n");
-            for (int e = 0; e < inlang.end_tags.Length; e++)
+            for (int e = 0; e < inlang.tags.end_tags.Length; e++)
             {
-                inlang.main_txt[id].Replace(inlang.end_tags[e], "");
+                inlang.main_txt[id].Replace(inlang.tags.end_tags[e], "");
             }
 
             hasChanged = true;
@@ -1046,74 +1079,114 @@ namespace TransPutt.Games
                 return -1;
         }
 
-        private void reformatTextToolStripMenuItem_Click(object sender, EventArgs e)
+        private string reformatText(TextBox tb, lang lng, PictureBox preview, int script_idx)
         {
             /*
              This reformats the currently displayed text and adds required linebreaks
              It's a little buggy, so dont go willy-nilly re-formatting everything all at once.
             */
 
+            var tb_lines = new List<string>();
+
             // Always back it up first...
-            SaveText(textBoxText1, curIndex, lang1);
+            SaveText(tb, script_idx, lng);
 
             // temp variable for the current text
-            string tb_text = textBoxText1.Text;
+            string tb_text = tb.Text;
 
             // No need to do anything if the box is blank
-            if (tb_text.Length == 0) return;
+            if (tb_text.Length == 0) return "";
 
-            // check for the existing end-of-line tags and remove them and any line break characters
-            var tb_lines = new List<string>();
-            var rem_vals = new Dictionary<string, string>() { 
-                { lang1.nl_tags[1], " " },
-                { lang1.nl_tags[2], " " },
-                { lang1.nl_tags[3], " " },
-                { "\r", "" },
-                { "\n", "" },
-                { "\r\n", "" } 
-            };
-            foreach (KeyValuePair<string, string> kp in rem_vals)
-            {
-                tb_text = tb_text.Replace(kp.Key, kp.Value);
+            var nl = lang1.tags.nl_tags;  // new line tags are now loaded with the lang struct
+
+            for (int t = 1; t < 4; t++)
+            {   // remove all new line control codes
+                tb_text = tb_text.Replace(nl[t], " ");
             }
+            // check for the existing end-of-line tags and remove them and any line break characters
+            tb_text = tb_text.Replace("\n", "").Replace("\r", "");
 
             // initialize our loop vars... 
             // skipRefresh is turned ON (prevents the form from firing the text changed event for the text box)
             // clear the text box...
-            int pos = 0;
-            bool reading_var = false;
             string cur_line = "";
+            string line_before_word = "";
             skipRefresh = true;
-            textBoxText1.Text = "";
-            var nl = lang1.nl_tags;  // new line tags are now loaded with the lang struct
+            tb.Text = "";
+            var mct = lng.tags.multi_char_tags;
+            int all_pos = tb_text.Length;
 
-            // loop through each character in the stored text
-            while (pos < tb_text.Length)
+            string[] lString = tb_text.Split(' ');
+            for (int l = 0; l < lString.Length; l++)
             {
+                string wrd = lString[l];
+                bool skip_word = false;
                 string next_line = "";
                 bool overflow = false; // continue while we havent overflown the horizontal space, or the string hasnt ended
-                while(!overflow && pos < tb_text.Length)
-                {
-                    char cur_char = tb_text[pos];  // the current character
-                    cur_line += cur_char;
-                    if (cur_char == '[') // the start of a tag
-                    {
-                        reading_var = true;
-                    } 
-                    else if (cur_char == ']') // end tag
-                    {
-                        reading_var = false;
-                    }
-                    textBoxText1.Text = cur_line;  // make the textbox only hold the current line
+                int pos = 0; // word position
 
-                    if (!reading_var)
+                if (wrd.Length > 1)
+                { // potentially a control code
+                    for (int i = 0; i < mct.Length; i++)
                     {
-                        UpdatePictureBox(pictureBoxPreview1, textBoxText1, lang1); 
+                        if (mct[i] == wrd)
+                        {
+                            skip_word = true;
+                            break;
+                        }
+                    }
+                }
+                if (skip_word)
+                {
+                    line_before_word = cur_line;
+                    cur_line += (cur_line.Length > 0) ? " " + wrd : wrd;
+                    all_pos -= (cur_line.Length > 0) ? wrd.Length + 1 : wrd.Length;
+                    tb.Text = cur_line;  // make the textbox only hold the current line
+                    UpdatePictureBox(preview, tb, lng);
+                    // update the picture box and check the global (eww) variable we added that stores whether the horizontal space was exceeded
+                    bool has_overflow = maxWidthExceeded;
+
+                    if (wrd == lng.tags.new_page) // np
+                    {
+                        if (cur_line.Length > 0) tb_lines.Add(cur_line);
+                        cur_line = "";
+                        continue;  // continue on to the next line if we get a new page (make this an option).
+                    }
+
+                    if (has_overflow)
+                    {
+                        //rebuild the text on the current line
+                        tb.Text = line_before_word;
+                        cur_line = wrd;
+
+                        // save textbox text as a line
+                        if (tb.Text.Length > 0) tb_lines.Add(tb.Text);
+                        // if we reach the end of the text before we can save the rest normally-- add the next line to the list
+                        // if (!(all_pos > tb_text.Length) && next_line.Length > 0) tb_lines.Add(next_line);
+                        continue;
+                    }
+                }
+                else
+                {
+                    // loop through each character in the stored text
+                    var end_word = pos + wrd.Length;
+                    cur_line += (cur_line.Length > 0) ? " " : "";
+                    all_pos -= (cur_line.Length > 0) ? 1 : 0;
+                    while (pos < end_word)
+                    {
+
+                        char cur_char = wrd[pos];  // the current character
+                        cur_line += cur_char.ToString();
+                        all_pos -= 1;
+                        tb.Text = cur_line;  // make the textbox only hold the current line
+                        UpdatePictureBox(preview, tb, lng);
+
                         // update the picture box and check the global (eww) variable we added that stores whether the horizontal space was exceeded
                         bool has_overflow = maxWidthExceeded;
 
-                        if (nl[4].Length > 0 && cur_char == ' ' && cur_line.Contains(nl[4])) // np
+                        if (cur_line.Contains(lng.tags.new_page)) // np
                         {
+                            cur_line += " ";
                             has_overflow = true;  // force the next line if we hit a new page tag
                         }
 
@@ -1128,20 +1201,25 @@ namespace TransPutt.Games
                             // remove the last index from the array
                             split_line = split_line.Where((source, index) => index != last_index).ToArray();
                             //rebuild the text on the current line
-                            textBoxText1.Text = String.Join(" ", split_line);
+                            tb.Text = String.Join(" ", split_line);
                             cur_line = next_line;
                             overflow = true;
                         }
+
+                        pos += 1;
+
+                        // save textbox text as a line
+                        if (tb.Text.Length > 0 && overflow) tb_lines.Add(tb.Text);
+                        overflow = false;
+                        // if we reach the end of the text before we can save the rest normally-- add the next line to the list
+                        // if ((all_pos > 0) && next_line.Length > 0) tb_lines.Add(next_line);
                     }
-                    pos += 1;
+
+                    // final line
+                    if ((lString.Length - 1 == l) && cur_line.Length > 0) tb_lines.Add(cur_line);
                 }
-
-                // save textbox text as a line
-                if (textBoxText1.Text.Length > 0) tb_lines.Add(textBoxText1.Text);
-                // if we reach the end of the text before we can save the rest normally-- add the next line to the list
-                if (!(pos < tb_text.Length) && next_line.Length > 0) tb_lines.Add(next_line);
             }
-
+            skipRefresh = false;
             if (tb_lines.ToArray().Length > 0)
             {   // loop through the new list of lines...
                 tb_text = "";
@@ -1154,10 +1232,13 @@ namespace TransPutt.Games
                     tb_text += $"{((c > 0) ? "\r\n" : "")}{nl[nl_idx]}{lines[c]}";
                 }
             }
-            // turn back on the refresh event
-            skipRefresh = false;
-            // update the text box
-            textBoxText1.Text = tb_text;
+
+            return tb_text;
+        }
+
+        private void reformatTextToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            textBoxText1.Text = reformatText(textBoxText1, lang1, pictureBoxPreview1, curIndex);
         }
 
         private void pictureBoxTable_Regular_Click(object sender, EventArgs e)
@@ -1225,5 +1306,53 @@ namespace TransPutt.Games
         {
             Clipboard.SetText(textBox_SelectChar.Text);
         }
+
+        private void autoGenerateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string tb_text = textBoxText1.Text;
+            for (int t = 1; t < lang1.tags.nl_tags.Length; t++)
+            {   // remove all existing new line control codes
+                tb_text = tb_text.Replace(lang1.tags.nl_tags[t], "");
+            }
+
+            string final_string = "";
+            string[] string_sep = new string[] { "\r\n" };
+            string[] tb_lines = tb_text.Split(string_sep, StringSplitOptions.None);
+            for (int c = 0; c < tb_lines.Length; c++)
+            {
+                if (c < 3)
+                {
+                    final_string += $"{((c > 0) ? "\r\n" : "")}{lang1.tags.nl_tags[c]}{tb_lines[c]}";
+                }
+                else
+                {
+                    final_string += $"\r\n{lang1.tags.nl_tags[3]}{tb_lines[c]}";
+                }
+            }
+            textBoxText1.Text = final_string;
+        }
+
+        private void textBoxText1_KeyDown(object sender, KeyEventArgs e)
+        {
+            skipRefresh = true;
+        }
+
+        private void textBoxText1_KeyUp(object sender, KeyEventArgs e)
+        {
+            skipRefresh = false;
+        }
+
+        string lastText = "";
+        private void refreshTimer_Tick(object sender, EventArgs e)
+        {
+            // moved to keyup so I can hold down buttons if i want...
+            if (skipRefresh || lastText == textBoxText1.Text) return;  // skip this. we're busy doing some hacky stuff...
+
+            lastText = textBoxText1.Text;
+            UpdatePictureBox(pictureBoxPreview1, textBoxText1, lang1);
+            UpdateSaveAllButton();
+        }
     }
+
+
 }
