@@ -739,6 +739,7 @@
             this.pictureBoxTable_Other.Size = new System.Drawing.Size(133, 62);
             this.pictureBoxTable_Other.TabIndex = 0;
             this.pictureBoxTable_Other.TabStop = false;
+            this.pictureBoxTable_Other.Click += new System.EventHandler(this.pictureBoxTable_Other_Click);
             // 
             // tabPage6
             // 
