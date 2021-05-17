@@ -1071,6 +1071,10 @@ namespace TransPutt.Games
                 pal[3] = Color.White;
             }
 
+            //Do not render anything when the width is less than / equal to 0
+            if (curlang.width_tbl[id] <= 0)
+                return null;
+
             Bitmap gfx = new Bitmap(curlang.width_tbl[id], 32);
 
             byte[][] dat = new byte[4][];
