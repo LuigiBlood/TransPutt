@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace TransPutt.Games
 {
@@ -28,8 +26,10 @@ namespace TransPutt.Games
             public byte[] icons_chr;                   //icons.bin
             public byte[] width_tbl;                   //width.tbl - Char Width Table
             public List<Tuple<string, string>> table;  //table.tbl - Table
+            public string script_path;
             public string[] main_txt;                  //main.txt - Main Text File
             public string[] main_end;                  //Keeps all End Commands in mind
+            public string notes_path;
             public string[] notes;                     //notes.txt - Notes
             public ControlTags tags;                   //consolidated tags
         }
@@ -53,42 +53,90 @@ namespace TransPutt.Games
             InitializeComponent();
         }
 
+        private Dictionary<string, string> DefaultLangCfg(string path)
+        {
+            string[] split = path.Split(Path.DirectorySeparatorChar);
+            string langName = split[split.Length - 1]; // the name of the folder
+                    
+            var langCfg = new Dictionary<string, string>()
+            {
+                {"name", langName},
+                {"fontPath", path + "\\font.bin"},
+                {"kanjiPath", path + "\\kanji.bin"},
+                {"iconsPath", path + "\\icons.bin"},
+                {"widthPath", path + "\\width.tbl"},
+                {"tablePath", path + "\\table.tbl"},
+                {"scriptPath", path + "\\main.txt"},
+                {"notesPath", path + "\\notes.txt"},
+            };
+            string jsonString = JsonSerializer.Serialize(langCfg);
+            File.WriteAllText(path + "\\paths.json", jsonString);
+
+            return langCfg;
+        }
+        
+        private Dictionary<string, string>? LoadLangCfg(string path)
+        {
+            Dictionary<string, string>? langCfg;
+            if (!File.Exists(path + "\\paths.json"))
+            {
+                langCfg = DefaultLangCfg(path);
+            }
+            else
+            {
+                try
+                {
+                    string jsonString = File.ReadAllText(path + "\\paths.json");
+                    langCfg = JsonSerializer.Deserialize<Dictionary<string, string>>(jsonString);
+                }
+                catch (Exception ex)
+                {
+                    langCfg = DefaultLangCfg(path);
+                }
+            }
+            return langCfg;
+        }
+        
+        
         private void MarvelousForm_Load(object sender, EventArgs e)
         {
-            int lang1_index = 0;
-            int lang2_index = 0;
-            int lang_idx = 0;
+            var lang1Index = 0;
+            var lang2Index = 0;
+            var langIdx = 0;
             //Get all languages available
             foreach (string path in Directory.GetDirectories(".\\marvelous\\"))
             {
-                if (!File.Exists(path + "\\font.bin"))
+                var langCfg = LoadLangCfg(path);     
+
+                string langName = langCfg?["name"] ?? "Name Error";
+                
+                if (!File.Exists(langCfg?["fontPath"]))
                     continue;
-                if (!File.Exists(path + "\\kanji.bin"))
+                if (!File.Exists(langCfg?["kanjiPath"]))
                     continue;
-                if (!File.Exists(path + "\\icons.bin"))
+                if (!File.Exists(langCfg?["iconsPath"]))
                     continue;
-                if (!File.Exists(path + "\\width.tbl"))
+                if (!File.Exists(langCfg?["widthPath"]))
                     continue;
-                if (!File.Exists(path + "\\table.tbl"))
+                if (!File.Exists(langCfg?["tablePath"]))
                     continue;
-                if (!File.Exists(path + "\\main.txt"))
+                if (!File.Exists(langCfg?["scriptPath"]))
                     continue;
-                string[] split = path.Split(Path.DirectorySeparatorChar);
-                string lang_name = split[split.Length - 1]; // the name of the folder
-                comboBoxLang1.Items.Add(lang_name);
-                comboBoxLang2.Items.Add(lang_name);
+                
+                comboBoxLang1.Items.Add(langName);
+                comboBoxLang2.Items.Add(langName);
 
                 // find the one that was selected last, if it still exists
-                if (lang_name == Properties.Settings.Default["marv_last_lang1"].ToString())
-                    lang1_index = lang_idx;
-                if (lang_name == Properties.Settings.Default["marv_last_lang2"].ToString())
-                    lang2_index = lang_idx;
-                lang_idx += 1;
+                if (langName == Properties.Settings.Default["marv_last_lang1"].ToString())
+                    lang1Index = langIdx;
+                if (langName == Properties.Settings.Default["marv_last_lang2"].ToString())
+                    lang2Index = langIdx;
+                langIdx += 1;
             }
 
             // set indexes based on the last state of the window
-            comboBoxLang1.SelectedIndex = lang1_index;
-            comboBoxLang2.SelectedIndex = lang2_index;
+            comboBoxLang1.SelectedIndex = lang1Index;
+            comboBoxLang2.SelectedIndex = lang2Index;
             numericUpDownID1.Value = get_int_config("marv_last_index");
             comboBoxStyle1.SelectedIndex = get_int_config("marv_text_type");
         }
@@ -300,18 +348,27 @@ namespace TransPutt.Games
         private void LoadLanguage(string lang, out lang outlang)
         {
             outlang = new lang();
-            outlang.name = lang;
             string fullpath = ".\\marvelous\\" + lang + "\\";
-            outlang.font_chr = File.ReadAllBytes(fullpath + "font.bin");
-            outlang.kanji_chr = File.ReadAllBytes(fullpath + "kanji.bin");
-            outlang.icons_chr = File.ReadAllBytes(fullpath + "icons.bin");
-            outlang.width_tbl = File.ReadAllBytes(fullpath + "width.tbl");
-            PuttScript.GetDictFromFile(fullpath + "table.tbl", 1, out outlang.table);
+            var langCfg = LoadLangCfg(fullpath);
+            if (langCfg is null)
+            {
+                toolStripStatusLabel1.Text = "Failed to Load Language: " + lang;
+                return;
+            }
+                
+            outlang.name = langCfg["name"];
+            outlang.font_chr = File.ReadAllBytes(langCfg["fontPath"]);
+            outlang.kanji_chr = File.ReadAllBytes(langCfg["kanjiPath"]);
+            outlang.icons_chr = File.ReadAllBytes(langCfg["iconsPath"]);
+            outlang.width_tbl = File.ReadAllBytes(langCfg["widthPath"]);
+            PuttScript.GetDictFromFile(langCfg["tablePath"], 1, out outlang.table);
+            outlang.script_path = langCfg["scriptPath"];
+            outlang.notes_path = langCfg["notesPath"];
             hasChanged = false;
 
             List<string> list_txt = new List<string>();
             List<string> list_end = new List<string>();
-            string temp = File.ReadAllText(fullpath + "main.txt");
+            string temp = File.ReadAllText(langCfg["scriptPath"]);
 
             //Find End Commands and new line tags
             string en1 = "";
@@ -370,8 +427,8 @@ namespace TransPutt.Games
 
             outlang.notes = new string[list_txt.Count];
             string[] temp_notes;
-            if (File.Exists(fullpath + "notes.txt"))
-                temp_notes = File.ReadAllLines(fullpath + "notes.txt");
+            if (File.Exists(langCfg["notesPath"]))
+                temp_notes = File.ReadAllLines(langCfg["notesPath"]);
             else
                 temp_notes = new string[0];
 
@@ -437,12 +494,12 @@ namespace TransPutt.Games
                 temp += "\n" + inlang.main_txt[i] + "\n" + inlang.main_end[i] + "\n";
             string fullpath = ".\\marvelous\\" + inlang.name + "\\";
 
-            File.WriteAllText(fullpath + "main.txt", temp);
-            File.WriteAllLines(fullpath + "notes.txt", inlang.notes);
+            File.WriteAllText(inlang.script_path, temp);
+            File.WriteAllLines(inlang.notes_path, inlang.notes);
             hasChanged = false;
 
             //MessageBox.Show(inlang.name + "\\main.txt and notes.txt have been updated.");
-            toolStripStatusLabel1.Text = inlang.name + "\\main.txt and notes.txt have been updated.";
+            toolStripStatusLabel1.Text = inlang.name + "\\script and notes have been updated.";
         }
 
         private void UpdateNotesBox(TextBox textBox, int id, lang inlang)
