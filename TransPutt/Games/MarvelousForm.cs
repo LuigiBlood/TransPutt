@@ -4,8 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using System.IO;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace TransPutt.Games
 {
@@ -69,7 +68,7 @@ namespace TransPutt.Games
                 {"scriptPath", path + "\\main.txt"},
                 {"notesPath", path + "\\notes.txt"},
             };
-            string jsonString = JsonSerializer.Serialize(langCfg);
+            string jsonString = JsonConvert.SerializeObject(langCfg, Formatting.Indented);
             File.WriteAllText(path + "\\paths.json", jsonString);
 
             return langCfg;
@@ -87,7 +86,7 @@ namespace TransPutt.Games
                 try
                 {
                     string jsonString = File.ReadAllText(path + "\\paths.json");
-                    langCfg = JsonSerializer.Deserialize<Dictionary<string, string>>(jsonString);
+                    langCfg = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonString);
                 }
                 catch (Exception ex)
                 {
