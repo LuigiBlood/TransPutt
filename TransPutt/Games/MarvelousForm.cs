@@ -136,14 +136,16 @@ namespace TransPutt.Games
             // set indexes based on the last state of the window
             comboBoxLang1.SelectedIndex = lang1Index;
             comboBoxLang2.SelectedIndex = lang2Index;
-            numericUpDownID1.Value = get_int_config("marv_last_index");
-            comboBoxStyle1.SelectedIndex = get_int_config("marv_text_type");
+            numericUpDownID1.Value = get_int_config("marv_last_index", 
+                int.Parse(numericUpDownID1.Maximum.ToString()));
+            comboBoxStyle1.SelectedIndex = get_int_config("marv_text_type", 3);
         }
 
-        private int get_int_config(string name)
+        private int get_int_config(string name, int max_val)
         {  // just gets the config option while avoiding some problems
             string cfg_val = Properties.Settings.Default[name].ToString();
-            return (cfg_val.Length > 0) ? int.Parse(cfg_val) : 0;
+            int final_val = (cfg_val.Length > 0) ? int.Parse(cfg_val) : 0;
+            return (final_val > max_val) ? max_val : final_val;
         }
 
         private void comboBoxLang1_SelectedIndexChanged(object sender, EventArgs e)
