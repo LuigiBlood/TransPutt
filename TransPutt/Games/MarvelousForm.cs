@@ -550,9 +550,11 @@ namespace TransPutt.Games
             {
                 using (Graphics g = Graphics.FromImage(regular))
                 {
-                    g.DrawImageUnscaled(RenderChar(i, curlang, 3), (i % 16) * 16, (i / 16) * 32);
+                    Bitmap gfx = RenderChar(i, curlang, 3);
+                    if (!(gfx is null))
+                        g.DrawImageUnscaled(gfx, (i % 16) * 16, (i / 16) * 32);
                     g.DrawLine(new Pen(Color.FromArgb(128, 255, 0, 0)), ((i % 16) * 16) + 15, (i / 16) * 32, ((i % 16) * 16) + 15, ((i / 16) * 32) + 32);
-                    g.DrawLine(new Pen(Color.FromArgb(128, 255, 0,0 )), ((i % 16) * 16), ((i / 16) * 32) + 32, ((i % 16) * 16) + 15, ((i / 16) * 32) + 32);
+                    g.DrawLine(new Pen(Color.FromArgb(128, 255, 0, 0)), ((i % 16) * 16), ((i / 16) * 32) + 32, ((i % 16) * 16) + 15, ((i / 16) * 32) + 32);
                 }
             }
             pictureBoxTable_Regular.Image = regular;
@@ -566,7 +568,9 @@ namespace TransPutt.Games
             {
                 using (Graphics g = Graphics.FromImage(kanji))
                 {
-                    g.DrawImageUnscaled(RenderChar(i, curlang, 3), ((i - 0x100) % 16) * 16, ((i - 0x100) / 16) * 32);
+                    Bitmap gfx = RenderChar(i, curlang, 3);
+                    if (!(gfx is null))
+                        g.DrawImageUnscaled(gfx, ((i - 0x100) % 16) * 16, ((i - 0x100) / 16) * 32);
                     g.DrawLine(new Pen(Color.FromArgb(128, 255, 0, 0)), (((i - 0x100) % 16) * 16) + 15, ((i - 0x100) / 16) * 32, (((i - 0x100) % 16) * 16) + 15, (((i - 0x100) / 16) * 32) + 32);
                     g.DrawLine(new Pen(Color.FromArgb(128, 255, 0, 0)), (((i - 0x100) % 16) * 16), (((i - 0x100) / 16) * 32) + 32, (((i - 0x100) % 16) * 16) + 15, (((i - 0x100) / 16) * 32) + 32);
                 }
@@ -785,11 +789,14 @@ namespace TransPutt.Games
                         break;
                     }
 
-                    using (Graphics g = Graphics.FromImage(output))
+                    if (!(char_gfx is null))
                     {
-                        g.DrawImageUnscaled(char_gfx, h_pixel, line * 32);
+                        using (Graphics g = Graphics.FromImage(output))
+                        {
+                            g.DrawImageUnscaled(char_gfx, h_pixel, line * 32);
+                        }
+                        h_pixel += char_gfx.Width;
                     }
-                    h_pixel += char_gfx.Width;
                     // added a check to see if we exceeded our horizontal screen space
                     if (h_pixel > maxwidth) maxWidthExceeded = true;
                 }
@@ -1070,6 +1077,10 @@ namespace TransPutt.Games
                 pal[2] = Color.Gray;
                 pal[3] = Color.White;
             }
+
+            //Do not render anything when the width is less than / equal to 0
+            if (curlang.width_tbl[id] <= 0)
+                return null;
 
             Bitmap gfx = new Bitmap(curlang.width_tbl[id], 32);
 
