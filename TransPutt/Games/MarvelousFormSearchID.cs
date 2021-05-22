@@ -15,13 +15,20 @@ namespace TransPutt.Games
     {
         public string[] list;
         public int id;
-
+        public int defaultIndex = -1;
+        public string lastFilter = "";
+        
         private System.Threading.Timer timer;
 
-        public MarvelousFormSearchID()
+        public MarvelousFormSearchID(string filter, int selectedIndex)
         {
             InitializeComponent();
             timer = new System.Threading.Timer((c) => FilterUpdateListBox(), null, Timeout.Infinite, Timeout.Infinite);
+            if (filter.Length > 0)
+                textBox1.Text = filter;
+
+            if (selectedIndex > -1)
+                defaultIndex = selectedIndex;
         }
 
         private void MarvelousFormSearchID_Load(object sender, EventArgs e)
@@ -44,6 +51,8 @@ namespace TransPutt.Games
         {
             if (listBox1.SelectedIndex > -1)
                 id = GetIDFromList(listBox1.SelectedIndex);
+            defaultIndex = listBox1.SelectedIndex;
+            buttonOK.Enabled = listBox1.Items.Count > 0 && listBox1.SelectedIndex > -1;
         }
 
         private void listBox1_DoubleClick(object sender, EventArgs e)
@@ -61,14 +70,14 @@ namespace TransPutt.Games
             }
             else
             {
+                lastFilter = textBox1.Text;
                 //Search via Filter
-                string filter = textBox1.Text;
                 List<string> newlist = new List<string>();
                 int idx = -1;
 
                 for (int i = 0; i < list.Length; i++)
                 {
-                    if (list[i].Contains(filter))
+                    if (list[i].Contains(lastFilter))
                     {
                         newlist.Add(i + ": " + list[i]);
                         if (i == id) idx = newlist.Count - 1;
@@ -81,7 +90,16 @@ namespace TransPutt.Games
 
                 listBox1.Items.AddRange(newlist.ToArray());
 
+                if (defaultIndex != -1)
+                {
+                    if (listBox1.Items.Count >= defaultIndex + 1)
+                    {
+                        listBox1.SelectedIndex = defaultIndex;
+                        idx = -1;
+                    }
+                }
                 if (idx != -1) listBox1.SelectedIndex = idx;
+                buttonOK.Enabled = listBox1.Items.Count > 0 && listBox1.SelectedIndex > -1;
                 listBox1.ResumeLayout();
             }
         }

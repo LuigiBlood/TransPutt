@@ -17,6 +17,12 @@ namespace TransPutt.Games
             public string[] end_tags;                  //storing end command tags here
             public string[] multi_char_tags;           //multi-character tags are not evaluated for render width until all are evaluated
         }
+
+        struct SearchResult
+        {
+            public string last_search;                 // gets updated every time a search is performed
+            public int last_search_select;             // keep track of the last listbox index that was selected
+        }
         struct lang
         {
             public string name;
@@ -40,6 +46,7 @@ namespace TransPutt.Games
 
         lang lang1;
         lang lang2;
+        private SearchResult last_results;
         bool hasChanged;
         // added skipRefresh and maxWidthExceeded "FORM GLOBALS"
         bool skipRefresh = false;
@@ -348,6 +355,10 @@ namespace TransPutt.Games
         //--Text Functions
         private void LoadLanguage(string lang, out lang outlang)
         {
+            last_results = new SearchResult();
+            last_results.last_search = "";
+            last_results.last_search_select = -1;
+
             outlang = new lang();
             string fullpath = ".\\marvelous\\" + lang + "\\";
             var langCfg = LoadLangCfg(fullpath);
@@ -1135,7 +1146,8 @@ namespace TransPutt.Games
 
         private int GetSelectID(lang inlang, bool useNotes = false)
         {
-            MarvelousFormSearchID idForm = new MarvelousFormSearchID();
+            MarvelousFormSearchID idForm = new MarvelousFormSearchID(last_results.last_search, 
+                last_results.last_search_select);
 
             if (!useNotes)
                 idForm.list = inlang.main_txt;
@@ -1143,9 +1155,17 @@ namespace TransPutt.Games
                 idForm.list = inlang.notes;
 
             if (idForm.ShowDialog() == DialogResult.OK)
+            {
+                last_results.last_search = idForm.lastFilter;
+                last_results.last_search_select = idForm.defaultIndex;
                 return idForm.id;
+            }
             else
+            {
+                last_results.last_search = idForm.lastFilter;
+                last_results.last_search_select = idForm.defaultIndex;
                 return -1;
+            }
         }
 
         private string reformatText(TextBox tb, lang lng, PictureBox preview, int script_idx)
