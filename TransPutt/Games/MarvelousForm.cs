@@ -705,6 +705,11 @@ namespace TransPutt.Games
                                 }
                                 continue;
                             }
+                            else if (encoded[i] == 0x1A || encoded[i] == 0x34 || encoded[i] == 0x56)
+                            {
+                                //Names
+                                char_gfx = RenderIcon(encoded[i], curlang, style);
+                            }
                             else
                             {
                                 //Other Icons
@@ -726,12 +731,18 @@ namespace TransPutt.Games
                         else if (encoded[i] == 0x6B)
                         {
                             //Number of something
-                            continue;
+                            //continue;
+                            char_gfx = RenderIcon(0x22, curlang, style);
+                            if ((h_pixel % 16) != 0)
+                                h_pixel += 16 - (h_pixel % 16);
                         }
                         else if (encoded[i] == 0x6C)
                         {
                             //Amount of something
-                            continue;
+                            //continue;
+                            char_gfx = RenderIcon(0x24, curlang, style);
+                            if ((h_pixel % 16) != 0)
+                                h_pixel += 16 - (h_pixel % 16);
                         }
                         else if (encoded[i] == 0x6E)
                         {
